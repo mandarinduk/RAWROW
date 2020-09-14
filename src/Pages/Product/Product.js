@@ -3,7 +3,7 @@ import "./Product.scss";
 
 class Product extends React.Component {
   render() {
-    return <div>Product</div>;
+    return <div className="Product">ddd</div>;
   }
 }
 
