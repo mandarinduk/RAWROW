@@ -1,0 +1,148 @@
+:root {
+  // Color
+  --black-color: #111;
+  --white-color: #fff;
+
+  // Size
+  --padding: 10px 0;
+
+  // Font Size
+  --font-x-large: 90px;
+  --font-large: 24px;
+  --font-medium: 20px;
+  --font-small: 18px;
+  --font-micro: 16px;
+}
+
+.loginTitle {
+  padding: 0 20px;
+  text-align: center;
+
+  h2 {
+    font-size: var(--font-x-large);
+    font-weight: 500;
+    line-height: 1.3em;
+    padding-bottom: 60px;
+  }
+
+  article {
+    position: relative;
+    max-width: 420px;
+    margin: 0 auto;
+
+    .loginBox.first {
+      border-bottom: none;
+    }
+
+    .loginBox {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--padding);
+      border: 2px solid #111;
+      border-left: none;
+      border-right: none;
+
+      .loginBoxTitle {
+        width: 100px;
+        font-size: var(--font-medium);
+        line-height: 38px;
+        font-weight: 700;
+        text-align: left;
+      }
+
+      .loginBoxDesc {
+        display: block;
+        width: 100%;
+        padding-left: 30px;
+        box-sizing: border-box;
+
+        input {
+          width: 100%;
+          height: 35px;
+          padding: 9px 2px 2px 0;
+          border: none;
+          outline: none;
+          font-size: var(--font-micro);
+        }
+
+        input::placeholder {
+          font-weight: 700;
+          font-size: var(--font-medium);
+          color: #9e9e9e;
+        }
+      }
+    }
+
+    .loginBtnBlack {
+      margin-top: 80px;
+      background-color: var(--black-color);
+      color: var(--white-color);
+      font-size: var(--font-small);
+      font-weight: 700;
+      line-height: 38px;
+      height: 40px;
+      width: 100%;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .loginBtnWhite {
+      background-color: var(--white-color);
+      color: var(--black-color);
+      font-size: var(--font-small);
+      font-weight: 700;
+      border: 2px solid var(--black-color);
+      box-sizing: border-box;
+      line-height: 38px;
+      height: 40px;
+      margin-top: 10px;
+      outline: none;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .button {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 15px 0;
+      padding-top: 50px;
+      font-size: var(--font-micro);
+      font-weight: 700;
+
+      li {
+        margin: 0 -30px;
+      }
+    }
+
+    .snsArea {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+
+      li {
+        border: 2px solid var(--black-color);
+        // width: 49%;
+
+        .snsBg {
+          img {
+            height: 31px;
+            vertical-align: top;
+            border-right: 2px solid var(--black-color);
+          }
+        }
+
+        .snsText {
+          text-align: center;
+          text-transform: uppercase;
+          padding-top: 7px;
+          font-size: var(--font-small);
+          font-weight: 500;
+          display: inline-block;
+          vertical-align: middle;
+          margin: 0 1.75rem;
+        }
+      }
+    }
+  }
+}
