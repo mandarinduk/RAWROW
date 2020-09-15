@@ -7,7 +7,7 @@ class Login extends React.Component {
     super();
     this.state = {
       memberId: "",
-      memberPasswd: "",
+      memberPw: "",
     }
   }
 
@@ -18,25 +18,20 @@ class Login extends React.Component {
     })
   }
 
-  handleClick = (e) => {
-    const { memberId, memberPasswd} = this.state
-    if( memberId.length < 1) {
-      alert("아이디 항목은 필수 입력값입니다.")
-    } else if ( memberPasswd.length < 4) {
-      alert("패스워드 항목이 4자(개) 이상으로 해주십시오.")
-    }
+  handleClick = () => {
+    const { memberId, memberPw } = this.state
+    if (!memberId.length) alert("아이디 항목은 필수 입력값입니다.")
+    else if (memberPw.length < 4) alert("패스워드 항목이 4자(개) 이상으로 해주십시오.")
   }
+  
 
   enterValue = (e) => {
-    const { memberId, memberPasswd} = this.state
-    if (e.key === "Enter") {
-      if( memberId.length < 1) {
-        alert("아이디 항목은 필수 입력값입니다.")
-      } else if ( memberPasswd.length < 4) {
-        alert("패스워드 항목이 4자(개) 이상으로 해주십시오.")
-      }
-    }
+    const { memberId, memberPw} = this.state
+    if (e.key !== "Enter") return
+    if(!memberId.length) alert("아이디 항목은 필수 입력값입니다.")
+    else if (memberPw.length < 4) alert("패스워드 항목이 4자(개) 이상으로 해주십시오.")
   }
+
   
 
   render() {
@@ -57,11 +52,11 @@ class Login extends React.Component {
             <div className="loginBox">
               <span className="loginBoxTitle">비밀번호</span>
               <label className="loginBoxDesc">
-                <input onKeyUp={this.enterValue} onChange={this.handleInput} id="memberPasswd" name="memberPasswd" type="text" placeholder="비밀번호를 입력해주세요."></input>
+                <input onKeyUp={this.enterValue} onChange={this.handleInput} id="memberPw" name="memberPw" type="text" placeholder="비밀번호를 입력해주세요."></input>
               </label>
             </div>
             <a href="#none"><button onClick={this.handleClick} className="loginBtnBlack">로그인</button></a>
-            <a href="#none"><button onClick={this.handleClick} className="loginBtnWhite">비회원 주문조회</button></a>
+            <a href="#none"><button className="loginBtnWhite">비회원 주문조회</button></a>
             <ul className="snsArea">
               <li>
                 <a href="#none">
