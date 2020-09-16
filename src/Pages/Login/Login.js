@@ -36,50 +36,60 @@ class Login extends React.Component {
 
   render() {
     return (
-    <div>
-      <div className="loginTitle">
-        <div className="titleAnimation">
-          <h2>LOGIN</h2>
-        </div>
+      <div className="Login">
+        <h2>LOGIN</h2>
         <div className="login">
           <article>
             <div className="loginBox first">
-              <span className="loginBoxTitle">아이디</span>
-              <label className="loginBoxDesc">
-                <input onKeyUp={this.enterValue} onChange={this.handleInput} id="memberId" name="memberId" type="text" placeholder="아이디를 입력해주세요."></input>
+              <span className="title">아이디</span>
+              <label className="desc">
+                <input onKeyUp={this.enterValue} onChange={this.handleInput} name="memberId" type="text" placeholder="아이디를 입력해주세요."/>
               </label>
             </div>
             <div className="loginBox">
-              <span className="loginBoxTitle">비밀번호</span>
-              <label className="loginBoxDesc">
-                <input onKeyUp={this.enterValue} onChange={this.handleInput} id="memberPw" name="memberPw" type="text" placeholder="비밀번호를 입력해주세요."></input>
+              <span className="title">비밀번호</span>
+              <label className="desc">
+                <input onKeyUp={this.enterValue} onChange={this.handleInput} name="memberPw" type="text" placeholder="비밀번호를 입력해주세요."/>
               </label>
             </div>
-            <a href="#none"><button onClick={this.handleClick} className="loginBtnBlack">로그인</button></a>
-            <a href="#none"><button className="loginBtnWhite">비회원 주문조회</button></a>
+            <a href="#none">
+              <button onClick={this.handleClick} className="loginBtn black">로그인</button>
+            </a>
+            <a href="#none">
+              <button className="loginBtn white">비회원 주문조회</button>
+            </a>
             <ul className="snsArea">
               <li>
                 <a href="#none">
-                  <span className="snsBg"><img src="https://rawrow.com/web/upload/mundane/login_naver.png" alt="네이버계정 로그인" /></span>
+                  <span className="snsBg">
+                    <img src="https://rawrow.com/web/upload/mundane/login_naver.png" alt="네이버계정 로그인" />
+                  </span>
                   <span className="snsText">naver login</span>
                 </a>
               </li>
               <li>
                 <a href="#none">
-                  <span className="snsBg"><img src="https://rawrow.com/web/upload/mundane/login_kakao.png" alt="카카오계정 로그인"/></span>
+                  <span className="snsBg">
+                    <img src="https://rawrow.com/web/upload/mundane/login_kakao.png" alt="카카오계정 로그인"/>
+                  </span>
                   <span className="snsText">kakao login</span>
                 </a>
               </li>
             </ul>
             <ul className="button">
-              <li><Link to="#none">아이디 찾기</Link></li>
-              <li><Link to="#none">비밀번호 찾기</Link></li>
-              <li><a href="/signup">회원 가입</a></li>
+              <li>
+                <Link to="#none">아이디 찾기</Link>
+              </li>
+              <li>
+                <Link to="#none">비밀번호 찾기</Link>
+              </li>
+              <li>
+                <a href="/signup">회원 가입</a>
+              </li>
             </ul>
           </article>
         </div>
       </div>
-    </div>
   )}
 }
 
