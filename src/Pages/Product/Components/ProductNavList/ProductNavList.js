@@ -3,6 +3,7 @@ import React from "react";
 class ProductNavList extends React.Component {
   render() {
     const { content, nameChange, index, checkTitle } = this.props;
+    const isOrange = content === "CLEARANCE" || content === "SALE";
 
     return (
       <li
@@ -11,13 +12,7 @@ class ProductNavList extends React.Component {
         index={index}
         onClick={() => nameChange(content)}
       >
-        <span
-          className={
-            (content === "CLEARANCE" || content === "SALE") && "colorOrange"
-          }
-        >
-          {content}
-        </span>
+        <span className={isOrange && "colorOrange"}>{content}</span>
       </li>
     );
   }

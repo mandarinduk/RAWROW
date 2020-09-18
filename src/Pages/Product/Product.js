@@ -9,28 +9,37 @@ class Product extends React.Component {
     this.state = {
       title: "ALL",
       navList: DEFAULT_LIST,
+      itemList: [],
+      category: "ALL",
     };
   }
 
+  componentDidMount() {
+    fetch("http://localhost:3000/data/productItemListData.json")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({ itemList: res.data });
+      });
+  }
+
   titleChange = (contents) => {
-    if (
-      contents === "ALL" ||
-      contents === "NEW ARRIVAL" ||
-      contents === "SALE"
-    ) {
-      this.setState({
-        title: contents,
-      });
-    } else if (LIST_OBJ[contents]) {
-      this.setState({
-        title: contents,
-        navList: LIST_OBJ[contents],
-      });
-    }
+    const isDefaultList =
+      contents === "ALL" || contents === "NEW ARRIVAL" || contents === "SALE";
+    const isNavList = isDefaultList ? DEFAULT_LIST : LIST_OBJ[contents];
+    const { title, navList } = this.state;
+
+    this.setState({
+      title: isNavList ? contents : title,
+      navList: isNavList ? isNavList : navList,
+      category: contents,
+    });
   };
 
   render() {
-    const { title, navList } = this.state;
+    const { title, navList, itemList, category } = this.state;
+    const isDefaultList =
+      title === "ALL" || title === "NEW ARRIVAL" || title === "SALE";
+    const isDefault = isDefaultList ? DEFAULT_LIST : navList;
 
     return (
       <div className="Product">
@@ -41,29 +50,15 @@ class Product extends React.Component {
         </h2>
         <div className="category">
           <ul>
-            {title === "ALL" || title === "NEW ARRIVAL" || title === "SALE"
-              ? DEFAULT_LIST?.map((content, index) => {
-                  return (
-                    <ProductNavList
-                      key={index}
-                      content={content}
-                      index={index}
-                      nameChange={(contents) => this.titleChange(contents)}
-                      checkTitle={title}
-                    />
-                  );
-                })
-              : navList?.map((content, index) => {
-                  return (
-                    <ProductNavList
-                      key={index}
-                      content={content}
-                      index={index}
-                      nameChange={(contents) => this.titleChange(contents)}
-                      checkTitle={title}
-                    />
-                  );
-                })}
+            {isDefault?.map((content, index) => (
+              <ProductNavList
+                key={index}
+                content={content}
+                index={index}
+                nameChange={(contents) => this.titleChange(contents)}
+                checkTitle={category}
+              />
+            ))}
           </ul>
           <div>
             <select>
@@ -75,7 +70,19 @@ class Product extends React.Component {
             </select>
           </div>
         </div>
-        <ItemList />
+        <ul>
+          {itemList?.map((item, idx) => (
+            <ItemList
+              key={item.product_name + idx}
+              itemSrc={item.thumbnail_image}
+              itemHoverSrc={item.hover_image}
+              itemName={item.product_name}
+              itemPrice={item.price}
+              itemSalePrice={item.sale_price}
+              itemSubText={item.sub_text}
+            />
+          ))}
+        </ul>
       </div>
     );
   }
