@@ -1,3 +1,75 @@
+@mixin bold($bold) {
+  font-weight: $bold;
+}
+
 .Product {
   padding: 0 20px;
+
+  h2 {
+    margin-bottom: 60px;
+    text-align: center;
+    font-size: 90px;
+    @include bold(500);
+  }
+
+  .h2Orange {
+    color: #ff5000;
+  }
+
+  .category {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 70px;
+
+    ul {
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      max-width: 600px;
+      text-align: center;
+
+      .productNav {
+        display: inline-block;
+        vertical-align: top;
+        padding: 0 15px;
+        line-height: 1.5em;
+        font-size: 26px;
+        @include bold(500);
+        &:hover {
+          cursor: pointer;
+          text-decoration: underline black;
+        }
+      }
+
+      .lineOn {
+        text-decoration: underline black;
+      }
+
+      .colorOrange {
+        color: #ff5100;
+      }
+    }
+
+    div {
+      position: absolute;
+      right: 0;
+      top: 17px;
+      height: 30px;
+      font-size: 24px;
+
+      select {
+        border: none;
+        margin-bottom: 0;
+        width: 147px;
+        font-size: 100%;
+        @include bold(500);
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
 }
