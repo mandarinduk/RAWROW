@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "username": "wecode",
+      "password": 123123
+    },
+    {
+      "id": 2,
+      "username": "mycode",
+      "password": 123123
+    }
+  ]
+}

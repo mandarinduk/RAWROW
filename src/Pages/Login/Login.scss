@@ -1,8 +1,4 @@
-:root {
-  // Color
-  --black-color: #111;
-  --white-color: #fff;
-
+.Login {
   // Size
   --padding: 10px 0;
 
@@ -12,9 +8,7 @@
   --font-medium: 20px;
   --font-small: 18px;
   --font-micro: 16px;
-}
 
-.Login {
   padding: 0 20px;
   text-align: center;
 
@@ -40,6 +34,7 @@
       border-bottom: 2px solid #111;
 
       .title {
+        display: block;
         width: 100px;
         font-size: var(--font-medium);
         font-weight: 700;
@@ -48,7 +43,7 @@
       }
 
       .desc {
-        width: 100%;
+        flex: 1;
         padding-left: 20px;
 
         input {
@@ -77,20 +72,20 @@
       font-weight: 700;
       line-height: 38px;
       cursor: pointer;
-    }
 
-    .loginBtn.black {
-      margin-top: 80px;
-      color: var(--white-color);
-      background-color: var(--black-color);
-      border: none;
-    }
+      &.black {
+        margin-top: 80px;
+        color: white;
+        background-color: black;
+        border: none;
+      }
 
-    .loginBtn.white {
-      margin-top: 10px;
-      color: var(--black-color);
-      background-color: var(--white-color);
-      border: 2px solid var(--black-color);
+      &.white {
+        margin-top: 10px;
+        color: black;
+        background-color: white;
+        border: 2px solid black;
+      }
     }
 
     .button {
@@ -112,12 +107,12 @@
       margin-top: 10px;
 
       li {
-        border: 2px solid var(--black-color);
+        border: 2px solid black;
 
         .snsBg img {
           vertical-align: top;
           height: 31px;
-          border-right: 2px solid var(--black-color);
+          border-right: 2px solid black;
         }
 
         .snsText {
