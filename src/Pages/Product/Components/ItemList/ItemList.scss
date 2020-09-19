@@ -1,0 +1,67 @@
+@mixin bold500 {
+  font-weight: 500;
+}
+
+@mixin bold800 {
+  font-weight: 800;
+}
+
+.ItemList {
+  display: inline-block;
+  vertical-align: top;
+  width: 25%;
+  padding: 0 0 3% 1%;
+
+  .itemImage {
+    position: relative;
+    .imgPic {
+      width: 100%;
+    }
+    .imgHover {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      &:hover {
+        opacity: 1;
+        transition-duration: 0.5s;
+      }
+    }
+  }
+
+  .itemInfo {
+    padding: 20px 0;
+
+    span {
+      display: block;
+      padding-bottom: 10px;
+      font-size: 30px;
+      @include bold500;
+    }
+
+    .price {
+      font-family: "DM Sans";
+      font-size: 25px;
+      @include bold800;
+    }
+
+    .priceLineOn {
+      text-decoration: line-through;
+    }
+
+    .discountPrice {
+      color: #ff5100;
+      font-family: "DM Sans";
+      font-size: 25px;
+      @include bold800;
+    }
+
+    .subText {
+      font-size: 27px;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
