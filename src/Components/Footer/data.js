@@ -22,7 +22,7 @@ export const FOOTER = {
   images: [
     "https://www.rawrow.com/web/upload/mundane/i_kakao_.png",
     "https://www.rawrow.com/web/upload/mundane/i_instagram_.png",
-    "https://www.rawrow.com/web/upload/mundane/i_facebook.png",
+    "https://www.rawrow.com/web/upload/mundane/i_facebook_.png",
     "https://www.rawrow.com/web/upload/mundane/i_blog_.png",
   ],
 };

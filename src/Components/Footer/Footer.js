@@ -5,25 +5,22 @@ import { FOOTER } from "./data";
 class Footer extends React.Component {
   render() {
     return (
-      <div className="Footer">
+      <footer className="Footer">
         <div className="footerWrapper">
           <ul>
-            <div className="footerSectionOne">
-              <li className="footerItemOne listBold">
-                {FOOTER.first.map((el) => {
-                  return <div>{el}</div>;
+            <div className="aboutSection">
+              <li className="aboutItems lightBold">
+                {FOOTER.first.map((el, i) => {
+                  return <div key={i}>{el}</div>;
                 })}
               </li>
-              <li className="footerItemTwo">
+              <li>
                 {FOOTER.second.map((el, i) => {
                   return (
                     <div
+                      key={i}
                       className={
-                        i < 1 || i >= 4
-                          ? i >= 4
-                            ? "listBoldKR"
-                            : "listBold"
-                          : ""
+                        i < 1 || i >= 4 ? (i >= 4 ? "bold" : "lightBold") : ""
                       }
                     >
                       {el}
@@ -31,24 +28,24 @@ class Footer extends React.Component {
                   );
                 })}
               </li>
-              <li className="footerItemThree">
-                {FOOTER.third.map((el) => {
-                  return <div>{el}</div>;
+              <li>
+                {FOOTER.third.map((el, i) => {
+                  return <div key={i}>{el}</div>;
                 })}
               </li>
             </div>
-            <li className="footerSectionTwo">
-              <div className="listBold">COPYRIGHT 2020</div>
-              <div className="listBold">HELLROWWORLD. ALL RIGHTS RESERVED.</div>
+            <li className="copyrightSection">
+              <p className="lightBold">COPYRIGHT 2020</p>
+              <p className="lightBold">HELLROWWORLD. ALL RIGHTS RESERVED.</p>
               <div className="footerIcon">
                 {FOOTER.images.map((el, i) => {
-                  return <img alt={`snsIcon_${i}`} src={el} />;
+                  return <img key={i} alt={`snsIcon_${i}`} src={el} />;
                 })}
               </div>
             </li>
           </ul>
         </div>
-      </div>
+      </footer>
     );
   }
 }

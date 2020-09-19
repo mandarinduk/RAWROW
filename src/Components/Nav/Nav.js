@@ -2,25 +2,47 @@ import React from "react";
 import "./Nav.scss";
 
 class Nav extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      searchOn: false,
+      popupOn: true,
+    };
+  }
+
+  handleSearch = () => {
+    this.setState((prev) => {
+      return { searchOn: !prev.searchOn };
+    });
+  };
+
+  handlePopup = () => {
+    this.setState((prev) => {
+      return { popupOn: !prev.popupOn };
+    });
+  };
+
   render() {
+    const { searchOn, popupOn } = this.state;
     return (
       <div className="Nav">
         <div className="navWrapper">
-          <div className="navPopup">
+          <div className={popupOn ? "navPopup" : "popupClose"}>
             <p>
-              <a href="http://localhost:3000/">
+              <a href="/main">
                 오직 이곳에서만, 로우로우
                 <span> 써비스</span>
               </a>
             </p>
-            <div>
-              <span className="closeBtnOne" />
-              <span className="closeBtnTwo" />
+            <div onClick={this.handlePopup}>
+              <span />
+              <span />
             </div>
           </div>
           <div className="navContent">
             <div className="navHome">
-              <a href="main">
+              <a href="/main">
                 <img
                   src="https://www.rawrow.com/web/upload/mundane/logo.png"
                   alt="logo"
@@ -63,25 +85,25 @@ class Nav extends React.Component {
               </li>
             </ul>
             <ul className="navRight">
-              <li>SEARCH</li>
+              <li onClick={this.handleSearch}>SEARCH</li>
               <li>MY PAGE</li>
               <li>LOGIN</li>
               <li>CART</li>
               <li>KR /</li>
             </ul>
           </div>
-        </div>
-        <div className="search">
-          <form>
-            <input type="text" placeholder="검색어를 입력하세요" />
-            <div>
-              <button />
+          <div className={searchOn ? "search searchOn" : "search"}>
+            <form>
+              <input type="text" placeholder="검색어를 입력하세요" />
               <div>
-                <span className="closeBtnOne" />
-                <span className="closeBtnTwo" />
+                <button />
+                <div onClick={this.handleSearch}>
+                  <span className="closeBtnOne" />
+                  <span className="closeBtnTwo" />
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     );

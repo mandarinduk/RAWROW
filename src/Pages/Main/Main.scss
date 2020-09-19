@@ -1,37 +1,39 @@
 .Main {
-  width: 100%;
   padding: 0 20px;
   margin-bottom: 20px;
+
   .mainContent {
-    ul {
-      li {
-        margin-bottom: 60px;
-        cursor: pointer;
-        img {
-          width: 100%;
+    li {
+      margin-bottom: 60px;
+      cursor: pointer;
+      img {
+        width: 100%;
+      }
+
+      .textBox {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+          font-size: 100px;
+          font-weight: 500;
         }
-        .textBox {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          .title {
-            font-size: 100px;
-            font-weight: 500;
+
+        div {
+          :first-child {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 2px;
           }
-          .contentBox {
-            .contentOne {
-              font-size: 32px;
-              font-weight: 800;
-              letter-spacing: 2px;
-            }
-            .contentTwo {
-              font-size: 36px;
-              font-weight: 500;
-            }
+          :last-child {
+            font-size: 36px;
+            font-weight: 500;
           }
         }
       }
-      li:hover .contentBox {
+
+      &:hover .contentBox {
         text-decoration: underline;
       }
     }

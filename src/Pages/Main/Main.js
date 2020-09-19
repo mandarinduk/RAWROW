@@ -1,48 +1,47 @@
 import React from "react";
 import "./Main.scss";
+import { MAINDATA } from "./data";
 
 class Main extends React.Component {
-  constructor() {
-    super();
+  // constructor() {
+  //   super();
+  //   window.addEventListener("scroll", this.handleScrollEvent);
 
-    this.state = {
-      mainData: [],
-    };
-  }
+  //   this.state = {
+  //     scrollValue: 0,
+  //   };
+  // }
+  // handleScrollEvent = () => {
+  //   this.setState({
+  //     scrollValue: window.pageYOffset,
+  //   });
+  //   // console.log(window.pageYOffset, "windowPageY");
 
-  componentDidMount() {
-    fetch("http://localhost:3000/data/commonData.json")
-      .then((res) => {
-        return res.json();
-      })
-      .then((result) => {
-        this.setState({
-          mainData: result.data,
-        });
-      });
-  }
+  //   if (this.state.scrollValue > 218) {
+  //     console.log("나는 218위치다.");
+  //   }
+  // };
   render() {
-    const { mainData } = this.state;
-    console.log(mainData);
+    // const { scrollValue } = this.state;
+    // console.log(scrollValue, "scrollValue");
     return (
       <div className="Main">
         <div className="mainContent">
           <ul>
-            {mainData.length &&
-              mainData.map((el, i) => {
-                return (
-                  <li>
-                    <img alt={`mainImage${i}`} src={el.url} />
-                    <div className="textBox">
-                      <span className="title">{el.title}</span>
-                      <div className="contentBox">
-                        <p className="contentOne">{el.contentOne}</p>
-                        <p className="contentTwo">{el.contentTwo}</p>
-                      </div>
+            {MAINDATA?.map((el, i) => {
+              return (
+                <li key={i}>
+                  <img alt={`mainImage${i}`} src={el.url} />
+                  <div className="textBox">
+                    <span className="title">{el.title}</span>
+                    <div className="contentBox">
+                      <p className="contents">{el.contents}</p>
+                      <p className="subText">{el.subText}</p>
                     </div>
-                  </li>
-                );
-              })}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

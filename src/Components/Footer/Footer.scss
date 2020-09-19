@@ -3,40 +3,48 @@
   height: 240px;
   padding: 0 20px;
   margin-bottom: 20px;
+
   .footerWrapper {
-    width: 100%;
     height: 100%;
     padding-top: 10px;
     border-top: 2px solid black;
+
     ul {
       display: flex;
       justify-content: space-between;
-      width: 100%;
+
       height: 100%;
       font-size: 14px;
       font-weight: 500;
       line-height: 22px;
       color: #111111;
-      .footerSectionOne {
+
+      .aboutSection {
         display: flex;
         justify-content: space-between;
         width: 60%;
-        .footerItemOne {
+
+        .aboutItems {
           margin-right: 120px;
+
           div {
             cursor: pointer;
-          }
-          div:hover {
-            text-decoration: underline;
+
+            &:hover {
+              text-decoration: underline;
+            }
           }
         }
       }
-      .footerSectionTwo {
+
+      .copyrightSection {
         width: 14%;
         margin-right: 60px;
+
         .footerIcon {
           width: 80px;
           margin-top: 20px;
+
           img {
             width: 30px;
             height: 30px;
@@ -45,10 +53,12 @@
           }
         }
       }
-      .listBold {
+
+      .lightBold {
         font-weight: 600;
       }
-      .listBoldKR {
+
+      .bold {
         font-weight: 800;
       }
     }
