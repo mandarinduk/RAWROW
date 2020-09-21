@@ -15,11 +15,13 @@ class Product extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:3000/data/productItemListData.json")
+    fetch("http://10.58.5.137:8002/product")
       .then((res) => res.json())
-      .then((res) => {
-        this.setState({ itemList: res.data });
-      });
+      .then((res) => this.setState({ itemList: res.data }));
+  }
+
+  componentDidUpdate() {
+    console.log("update");
   }
 
   titleChange = (contents) => {
@@ -35,6 +37,19 @@ class Product extends React.Component {
     });
   };
 
+  // test = () => {
+  //   fetch("http://10.58.5.137:8002/user/login", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       userid: "hellrowworld",
+  //       password: "1q2w3e4r",
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((result) => console.log("결과: ", result))
+  //     .catch((err) => console.log(err));
+  // };
+
   render() {
     const { title, navList, itemList, category } = this.state;
     const isDefaultList =
@@ -43,11 +58,18 @@ class Product extends React.Component {
 
     return (
       <div className="Product">
-        <h2
-          className={(title === "CLEARANCE" || title === "SALE") && "h2Orange"}
-        >
-          {title}
-        </h2>
+        <div className="titleCenter">
+          <div
+            className={
+              title === "CLEARANCE" || title === "SALE"
+                ? "h2Orange title"
+                : "title"
+            }
+          >
+            {title}
+            <div className="titleBackground"></div>
+          </div>
+        </div>
         <div className="category">
           <ul>
             {isDefault?.map((content, index) => (
@@ -73,13 +95,14 @@ class Product extends React.Component {
         <ul>
           {itemList?.map((item, idx) => (
             <ItemList
-              key={item.product_name + idx}
-              itemSrc={item.thumbnail_image}
+              key={item.name + idx}
+              itemSrc={item.thumbnail}
               itemHoverSrc={item.hover_image}
-              itemName={item.product_name}
+              itemName={item.name}
               itemPrice={item.price}
               itemSalePrice={item.sale_price}
               itemSubText={item.sub_text}
+              itemLastText={this.state.title}
             />
           ))}
         </ul>

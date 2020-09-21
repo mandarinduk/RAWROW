@@ -10,6 +10,7 @@ class ItemList extends React.Component {
       itemPrice,
       itemSalePrice,
       itemSubText,
+      itemLastText,
     } = this.props;
 
     return (
@@ -32,12 +33,15 @@ class ItemList extends React.Component {
             <span className={itemSalePrice ? "price priceLineOn" : "price"}>
               {itemPrice.toLocaleString()}원
             </span>
-            {itemSalePrice && (
+            {itemSalePrice !== 0 && (
               <span className="discountPrice">
                 {itemSalePrice.toLocaleString()}원
               </span>
             )}
             {itemSubText && <span className="subText">{itemSubText}</span>}
+            {itemLastText === "CLEARANCE" && (
+              <span className="lastText">LAST CHANCE</span>
+            )}
           </a>
         </div>
       </li>
