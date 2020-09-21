@@ -102,6 +102,10 @@
           overflow: hidden;
           margin-top: -7px;
 
+          .underline {
+            text-decoration: underline;
+          }
+
           a:hover {
             text-decoration: underline;
           }

@@ -52,7 +52,9 @@ class Nav extends React.Component {
             </div>
             <ul className="navCenter">
               <li className="navCenterList">
-                <a href="main">PRODUCT</a>
+                <a href="main" className="">
+                  PRODUCT
+                </a>
                 <ul className="productItems">
                   <li>NEW ARRIVAL</li>
                   <li>R BAG</li>
