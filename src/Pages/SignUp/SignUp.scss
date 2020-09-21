@@ -36,6 +36,7 @@
 
       .list {
         display: flex;
+        position: relative;
         align-items: center;
         padding: var(--padding);
         // margin: 15px 0;
@@ -69,32 +70,32 @@
           display: flex;
           padding-left: 20px;
           align-items: center;
+
           //margin-right: 40px;
 
           label {
             font-size: var(--font-medium);
             font-weight: 700;
             // width: 100%;
-          }
 
-          .idCheck {
-            display: none;
+            .idCheck {
+              display: none;
 
-            &.isIdActive {
-              display: block;
-              position: absolute;
-              top: 265px;
-              right: 484px;
-              font-size: 10px;
+              &.isIdActive {
+                display: block;
+                position: absolute;
+                right: 0;
+                font-size: 10px;
+                font-weight: 700;
+              }
             }
           }
 
           .pwGuide {
             display: none;
             position: absolute;
-            right: 450px;
+            right: 0;
             text-align: left;
-            width: 300px;
             padding: 5px 0;
             border-radius: 20px;
             background-color: white;
@@ -112,8 +113,7 @@
             &.isPwActive {
               display: block;
               position: absolute;
-              top: 389px;
-              right: 484px;
+              right: 0;
               font-size: 10px;
               font-weight: 700;
             }
@@ -125,8 +125,7 @@
             &.isNameActive {
               display: block;
               position: absolute;
-              top: 450px;
-              right: 484px;
+              right: 0;
               font-size: 10px;
               font-weight: 700;
             }
@@ -134,8 +133,6 @@
 
           .inputIdPw,
           .inputName {
-            // flex: 1;
-
             input {
               width: 500px;
               height: 35px;

@@ -5,7 +5,7 @@ class RegionList extends Component {
     const { regionName } = this.props;
     return (
       <>
-        <option>{regionName}</option>
+        <option value="">{regionName}</option>
       </>
     );
   }
