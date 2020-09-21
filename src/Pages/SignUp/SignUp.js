@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import RegionList from "./regionList";
+import REGION from "./regionData";
 import idData from "./idData";
 import "./SignUp.scss";
 
@@ -10,50 +12,30 @@ class SignUp extends React.Component {
     memberRePw: "",
     memberName: "",
     memberAddress: "",
-    // phone: "",
-    // memberMobile: "",
+    memberMobile1: "",
+    memberMobile2: "",
     memberEmail: "",
-    // gender: "",
-    // birth: "",
-    // region: "",
-    usableId: false,
     idCheck: false,
     idData: idData,
     idMsg: "",
     pwMsg: "",
     pwGuide: false,
+    pwCheck: false,
+    nameCheck: false,
+    nameMsg: "",
+    regionList: [],
+    agreeAll: false,
+    useAgree: false,
+    collectAgree: false,
+    smsAgree: false,
+    mailAgree: false,
   };
 
-  handleId = () => {
-    const { memberId } = this.state;
-    const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
-    const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    const capital = /[A-Z]/;
-    // const checkNum = /[0-9]/;
-
-    if (
-      memberId.match(regExp) ||
-      memberId.match(korean) ||
-      memberId.match(capital)
-      // || memberId.match(checkNum)
-    ) {
-      this.setState({
-        idMsg: idData[3].msg,
-      });
-    } else if (memberId.length === 0) {
-      this.setState({
-        idMsg: idData[1].msg,
-      });
-    } else if (memberId.length < 4 || memberId.length > 16) {
-      this.setState({
-        idMsg: idData[2].msg,
-      });
-    } else {
-      this.setState({
-        idMsg: idData[0].msg,
-      });
-    }
-  };
+  componentDidMount() {
+    this.setState({
+      regionList: REGION,
+    });
+  }
 
   handleInput = e => {
     const { value, name } = e.target;
@@ -63,7 +45,60 @@ class SignUp extends React.Component {
         [name]: value,
       },
       () => {
-        this.handleId();
+        const { memberId, memberPw, memberRePw, memberName } = this.state;
+        const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
+        const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+        const english = /^[a-zA-Z]*$/;
+        const upper = /[A-Z]/;
+        const checkNum = /[0-9]/;
+        // id validation
+        if (
+          memberId.match(regExp) ||
+          memberId.match(korean) ||
+          memberId.match(upper)
+        ) {
+          this.setState({
+            idMsg: idData[3].msg,
+          });
+        } else if (memberId.length === 0) {
+          this.setState({
+            idMsg: idData[1].msg,
+          });
+        } else if (memberId.length < 4 || memberId.length > 16) {
+          this.setState({
+            idMsg: idData[2].msg,
+          });
+        } else {
+          this.setState({
+            idMsg: idData[0].msg,
+          });
+        }
+        // password validation
+        if (memberPw !== memberRePw) {
+          this.setState({
+            pwMsg: pwData[1].msg,
+          });
+        }
+        if (memberPw === memberRePw) {
+          this.setState({
+            pwMsg: pwData[0].msg,
+          });
+        }
+        // name validation
+        if (
+          (memberName.match(english) && memberName.match(korean)) ||
+          memberName.length === 0
+        ) {
+          this.setState({
+            nameMsg: nameData[0].msg,
+          });
+        }
+
+        if (memberName.match(regExp) || memberName.match(checkNum)) {
+          this.setState({
+            nameMsg: nameData[1].msg,
+          });
+        }
       }
     );
   };
@@ -83,27 +118,165 @@ class SignUp extends React.Component {
       memberName,
       // birth,
       memberAddress,
-      // memberMobile,
+      memberMobile1,
+      memberMobile2,
       memberEmail,
       // usableId,
     } = this.state;
+    const checkEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    const english = /^[a-zA-Z]*$/;
     if (!memberId) {
       alert("아이디를 입력해주세요.");
+    } else if (!memberPw) {
+      alert("비밀번호를 입력해주세요.");
+    } else if (isNaN(Number(memberPw && memberRePw))) {
+      alert("올바른 비밀번호를 입력해주세요.");
+    } else if (!memberRePw) {
+      alert("비밀번호를 입력해주세요.");
+    } else if (memberPw !== memberRePw) {
+      alert("비밀번호가 일치하지 않습니다.");
+    } else if (!memberName) {
+      alert("이름을 입력해주세요.");
+    } else if (!memberName.match(korean) && !memberName.match(english)) {
+      alert("이름은 한글과 영문만 입력 가능합니다.");
+    } else if (!memberAddress) {
+      alert("주소를 입력해주세요.");
+    } else if (!memberMobile1 || !memberMobile2) {
+      alert("휴대폰 번호를 입력해주세요.");
     } else if (
-      !memberPw ||
-      !memberRePw ||
-      !memberName ||
-      !memberAddress ||
-      // !memberMobile ||
-      !memberEmail
+      isNaN(Number(memberMobile1)) ||
+      memberMobile1.length < 4 ||
+      isNaN(Number(memberMobile2)) ||
+      memberMobile2.length < 4
     ) {
-      alert("필수항목을 입력해주세요.");
-    } else {
-      alert("환영합니다!");
+      alert(mobileData[1].msg);
+    } else if (!memberEmail) {
+      alert("이메일을 입력해주세요.");
+    } else if (!memberEmail.match(checkEmail)) {
+      alert(emailData[1].msg);
+    } else if (
+      this.state.agreeAll ||
+      (!this.state.useAgree && !this.state.collectAgree)
+    ) {
+      this.props.history.push("/main");
     }
   };
 
+  test = () => {
+    const { useAgree } = this.state;
+    if (
+      useAgree &&
+      this.state.collectAgree &&
+      this.state.smsAgree &&
+      this.state.mailAgree
+    ) {
+      console.log("ASDASDASDASD");
+      this.setState({
+        agreeAll: true,
+      });
+    } else {
+      console.log("1231312123");
+      this.setState({
+        agreeAll: false,
+      });
+    }
+  };
+
+  checkUseAgree = () => {
+    const { useAgree } = this.state;
+    console.log("1", useAgree);
+    this.setState(
+      {
+        useAgree: !useAgree,
+      },
+      () => this.test()
+    );
+    console.log("1", useAgree);
+
+    // console.log("use", useAgree);
+  };
+
+  checkCollectAgree = () => {
+    const { collectAgree } = this.state;
+    this.setState({
+      collectAgree: !collectAgree,
+    });
+    console.log("collect", collectAgree);
+  };
+
+  checkSmsAgree = () => {
+    this.setState({
+      smsAgree: !this.state.smsAgree,
+    });
+
+    if (
+      this.state.useAgree &&
+      this.state.collectAgree &&
+      this.state.smsAgree &&
+      this.state.mailAgree
+    ) {
+      this.setState({
+        agreeAll: !this.state.agreeAll,
+      });
+    } else {
+      this.setState({
+        agreeAll: this.state.agreeAll,
+      });
+    }
+    console.log("sms", this.state.smsAgree);
+  };
+
+  checkMailAgree = () => {
+    this.setState({
+      mailAgree: !this.state.mailAgree,
+    });
+
+    if (
+      this.state.useAgree &&
+      this.state.collectAgree &&
+      this.state.smsAgree &&
+      this.state.mailAgree
+    ) {
+      this.setState({
+        agreeAll: !this.state.agreeAll,
+      });
+      return;
+    } else {
+      this.setState({
+        agreeAll: this.state.agreeAll,
+      });
+      return;
+    }
+    console.log("sms", this.state.smsAgree);
+    console.log("mail", this.state.mailAgree);
+    console.log("all", this.state.agreeAll);
+  };
+
+  //   const { mailAgree } = this.state;
+  //   this.setState({
+  //     mailAgree: !this.state.mailAgree,
+  //   });
+  //   console.log("mail", mailAgree);
+  // };
+
+  agreeAllToggle = () => {
+    this.setState({
+      agreeAll: !this.state.agreeAll,
+      useAgree: !this.state.agreeAll,
+      collectAgree: !this.state.agreeAll,
+      smsAgree: !this.state.agreeAll,
+      mailAgree: !this.state.agreeAll,
+    });
+    console.log("agreeAll", this.state.agreeAll);
+    console.log("use\\All", this.state.useAgree);
+  };
+
   render() {
+    const { regionList } = this.state;
+    // console.log("agreeAll", this.state.agreeAll);
+    console.log("use\\All", this.state.useAgree);
+
     return (
       <div className="SignUp">
         <div className="title">
@@ -172,6 +345,13 @@ class SignUp extends React.Component {
                     placeholder="비밀번호를 입력해주세요."
                   />
                 </label>
+                <span
+                  className={
+                    !this.state.pwCheck ? "isPwActive pwCheck" : "pwCheck"
+                  }
+                >
+                  {this.state.pwMsg}
+                </span>
               </div>
             </div>
             <div className="list">
@@ -187,6 +367,15 @@ class SignUp extends React.Component {
                     placeholder="이름을 입력해주세요."
                   />
                 </label>
+                <span
+                  className={
+                    !this.state.nameCheck
+                      ? "isNameActive nameCheck"
+                      : "nameCheck"
+                  }
+                >
+                  {this.state.nameMsg}
+                </span>
               </div>
             </div>
             <div className="list">
@@ -196,7 +385,7 @@ class SignUp extends React.Component {
                   <input
                     className="address"
                     maxLength="40"
-                    size="20"
+                    size="30"
                     // onKeyUp={this.enterValue}
                     onChange={this.handleInput}
                     name="memberAddress"
@@ -225,18 +414,24 @@ class SignUp extends React.Component {
                 <select className="block">
                   <option>010</option>
                   <option>011</option>
+                  <option>016</option>
+                  <option>017</option>
+                  <option>018</option>
+                  <option>019</option>
                 </select>
                 <span className="hyphen">-</span>
                 <input
-                  name="memberMobile"
+                  name="memberMobile1"
                   maxLength="4"
+                  onChange={this.handleInput}
                   className="block"
                   type="text"
                 />
                 <span className="hyphen">-</span>
                 <input
-                  name="memberMobile"
+                  name="memberMobile2"
                   maxLength="4"
+                  onChange={this.handleInput}
                   className="block"
                   type="text"
                 />
@@ -289,7 +484,7 @@ class SignUp extends React.Component {
                     id="birthType0"
                     name="birthType"
                     value="S"
-                    checked
+                    defaultChecked
                   />
                   <label htmlFor="birthType0">양력</label>
                   <input
@@ -325,10 +520,10 @@ class SignUp extends React.Component {
             <div className="list">
               <span className="standard">지역</span>
               <div className="desc">
-                <select className="region">
-                  {/* <option value="region_00">선택</option> */}
-                  {/* {<option value="region0" onClick={() => this.handleClick(1)}>선택</option>
-                  <option value="region1" onClick={() =>this.handleClick(2)}>서울</option>} */}
+                <select className="dropdown">
+                  {regionList.map(region => {
+                    return <RegionList regionName={region.name} />;
+                  })}
                 </select>
               </div>
             </div>
@@ -341,7 +536,12 @@ class SignUp extends React.Component {
                 쇼핑정보 수신(선택)에 모두 동의합니다.
               </label>
               <span className="agreeAll">
-                <input type="checkBox" />
+                <input
+                  onChange={this.agreeAllToggle}
+                  name="agreeAll"
+                  type="checkbox"
+                  checked={this.state.agreeAll ? "true" : ""}
+                />
               </span>
             </div>
             <div className="otherTermBox">
@@ -356,9 +556,14 @@ class SignUp extends React.Component {
               </div>
               <div className="agreeCheck">
                 <span>이용약관에 동의하십니까?</span>
-                <span>
+                <span onChange={this.checkUseAgree}>
                   <label htmlFor="agreeService">동의함</label>
-                  <input id="agreeService" name="agree" type="checkbox" />
+                  <input
+                    name="useAgree"
+                    type="checkbox"
+                    checked={this.state.useAgree ? "true" : ""}
+                    // checked={checked} onChange={() => setChecekd(!checked)}
+                  />
                 </span>
               </div>
             </div>
@@ -374,9 +579,15 @@ class SignUp extends React.Component {
               </div>
               <div className="agreeCheck">
                 <span>개인정보 수집 및 이용에 동의하십니까?</span>
-                <span>
+                <span onChange={this.checkCollectAgree}>
                   <label htmlFor="agreePrivacy">동의함</label>
-                  <input id="agreePrivacy" name="agree" type="checkbox" />
+                  <input
+                    // onChange={this.checkCollectAgree}
+
+                    name="collectAgree"
+                    type="checkbox"
+                    checked={this.state.collectAgree ? "true" : ""}
+                  />
                 </span>
               </div>
             </div>
@@ -390,15 +601,23 @@ class SignUp extends React.Component {
               </div>
               <div className="agreeCheck">
                 <span>SMS 수신을 동의하십니까?</span>
-                <span>
-                  <input id="agreeSms" name="agree" type="checkbox" />
+                <span onChange={this.checkSmsAgree}>
+                  <input
+                    name="smsAgree"
+                    type="checkbox"
+                    checked={this.state.smsAgree ? "true" : ""}
+                  />
                   <label htmlFor="agreeSms">동의함</label>
                 </span>
               </div>
               <div className="agreeCheck">
                 <span>이메일 수신을 동의하십니까??</span>
-                <span>
-                  <input id="agreeEmail" name="agree" type="checkbox" />
+                <span onChange={this.checkMailAgree}>
+                  <input
+                    name="mailAgree"
+                    type="checkbox"
+                    checked={this.state.mailAgree ? "true" : ""}
+                  />
                   <label htmlFor="agreeEmail">동의함</label>
                 </span>
               </div>
@@ -419,8 +638,46 @@ class SignUp extends React.Component {
 
 export default SignUp;
 
-// const region = ["선택", "서울"];
-// const STATUS = {
-//   1: "이메일을 입력해주세요",
-//   2: "비밀번호를 입력해주세요",
-// };
+const pwData = [
+  {
+    id: 1,
+    msg: "",
+  },
+  {
+    id: 2,
+    msg: "비밀번호가 일치하지 않습니다.",
+  },
+];
+
+const nameData = [
+  {
+    id: 1,
+    msg: "",
+  },
+  {
+    id: 2,
+    msg: "한글과 영문만 입력 가능합니다.",
+  },
+];
+
+const mobileData = [
+  {
+    id: 1,
+    msg: "",
+  },
+  {
+    id: 2,
+    msg: "올바른 휴대전화번호를 입력하세요.",
+  },
+];
+
+const emailData = [
+  {
+    id: 1,
+    msg: "",
+  },
+  {
+    id: 2,
+    msg: "입력하신 이메일을 사용할 수 없습니다.",
+  },
+];

@@ -106,12 +106,38 @@
             }
           }
 
+          .pwCheck {
+            display: none;
+
+            &.isPwActive {
+              display: block;
+              position: absolute;
+              top: 389px;
+              right: 484px;
+              font-size: 10px;
+              font-weight: 700;
+            }
+          }
+
+          .nameCheck {
+            display: none;
+
+            &.isNameActive {
+              display: block;
+              position: absolute;
+              top: 450px;
+              right: 484px;
+              font-size: 10px;
+              font-weight: 700;
+            }
+          }
+
           .inputIdPw,
           .inputName {
             // flex: 1;
 
             input {
-              width: 350px;
+              width: 500px;
               height: 35px;
               padding: 9px 2px 2px 0px;
               border: none;
@@ -180,7 +206,7 @@
             border: 2px solid black;
           }
 
-          .region {
+          .dropdown {
             width: 635px;
             border: 2px solid black;
             font-size: var(--font-medium);
@@ -229,6 +255,9 @@
         .agreeCheck {
           display: flex;
           justify-content: space-between;
+
+          .agreeAll {
+          }
         }
       }
       .joinBtn {
