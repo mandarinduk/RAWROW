@@ -1,0 +1,546 @@
+@mixin flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Detail {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 20px 110px;
+
+  .detailContents {
+    display: flex;
+    justify-content: space-between;
+    width: 1500px;
+    position: relative;
+
+    .imageSection {
+      @include flexColumn;
+      width: 65%;
+
+      .productImage {
+        img {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+      }
+
+      .reviewBox {
+        padding: 0 20px;
+
+        .scoreBox {
+          .scoreTitle {
+            .title {
+              font-size: 32px;
+              font-weight: 500;
+              margin-bottom: 10px;
+            }
+
+            .subtitle {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              span {
+                display: inline-block;
+              }
+
+              div {
+                :nth-child(1) {
+                  width: 58px;
+                  font-size: 13px;
+                  border-right: 1px solid rgb(140, 140, 140);
+                }
+
+                :nth-child(2) {
+                  margin-left: 12px;
+                  font-size: 13px;
+                  color: rgb(159, 159, 159);
+                }
+              }
+
+              .reviewBoard {
+                width: 60px;
+                height: 24px;
+                text-align: center;
+                line-height: 25px;
+                font-size: 12px;
+                color: white;
+                background-color: #303030;
+                border-radius: 4px;
+              }
+            }
+          }
+
+          .scoreGraph {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            height: 210px;
+            margin-top: 40px;
+            padding: 0 20px;
+            background-color: white;
+            border: 1px solid rgb(225, 225, 225);
+
+            .graphWrapper {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              width: 65%;
+
+              .graphBox {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                height: 80%;
+
+                .score {
+                  display: block;
+                  width: 16%;
+                  text-align: center;
+
+                  :nth-child(1) {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 77px;
+                    font-size: 48px;
+                    color: white;
+                    background-color: #252525;
+                  }
+
+                  :nth-child(2) {
+                    width: 100%;
+                    height: 14px;
+                    font-size: 12px;
+                    margin-top: 10px;
+                    color: #767676;
+                  }
+                }
+
+                .graph {
+                  width: 80%;
+
+                  ul {
+                    li {
+                      display: flex;
+                      justify-content: space-between;
+
+                      span {
+                        display: inline-block;
+                        color: #9d9d9d;
+                        font-size: 12px;
+                      }
+                      margin-bottom: 10px;
+
+                      :nth-child(1) {
+                        width: 60px;
+                      }
+
+                      :nth-child(2) {
+                        width: 380px;
+                        height: 14px;
+                        background-color: #f4f4f4;
+                      }
+
+                      :nth-child(3) {
+                        width: 30px;
+                        margin-left: 20px;
+                        text-align: center;
+                      }
+
+                      .orangeGraph {
+                        background-color: #ff4c23;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .scoreText {
+                margin-top: 10px;
+                font-size: 14px;
+
+                span {
+                  color: #6eb67e;
+                }
+              }
+            }
+
+            .divideLine {
+              width: 1px;
+              height: 80%;
+              background-color: rgb(230, 230, 230);
+            }
+
+            .thumnailBox {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-around;
+              align-items: center;
+              width: 25%;
+              height: 80%;
+
+              :first-child {
+                .reviewImg {
+                  background-image: url("https://assets9.cre.ma/p/rawrow-com/reviews/00/00/00/33/37/image2/thumbnail_c7d85e5bca25f3a5.jpg");
+                  background-size: cover;
+                }
+
+                div {
+                  display: inline-block;
+                  width: 50px;
+                  height: 50px;
+                  background-color: #ededed;
+                  margin: 0 2px 2px 2px;
+                }
+              }
+
+              :last-child {
+                font-size: 12px;
+                color: #878787;
+              }
+            }
+          }
+        }
+
+        .listBox {
+          @include flexColumn;
+          justify-content: space-around;
+          margin-top: 40px;
+          height: 450px;
+
+          .filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgb(225, 225, 225);
+
+            ul {
+              display: flex;
+              height: 20px;
+
+              li {
+                display: flex;
+                align-items: flex-end;
+                height: 100%;
+                cursor: pointer;
+
+                &:nth-child(1) {
+                  font-size: 16px;
+                  font-weight: 700;
+                }
+                &:nth-child(2) {
+                  margin-left: 10px;
+                  font-size: 16px;
+                }
+                &:nth-child(3) {
+                  margin-left: 30px;
+                  font-size: 13px;
+                  color: #949494;
+                }
+                &:nth-child(4) {
+                  margin-left: 30px;
+                  font-size: 13px;
+                  color: #949494;
+                }
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+
+            .filterInfo {
+              font-size: 11px;
+              color: #8e8e8e;
+              cursor: pointer;
+              transition: 0.5s all;
+
+              &:hover {
+                color: #525252;
+              }
+            }
+          }
+
+          .reviewContents {
+            display: flex;
+
+            .starText {
+              width: 75%;
+
+              .starTitle {
+                margin-bottom: 20px;
+
+                .star {
+                  font-size: 15px;
+                  color: #ff7242;
+                }
+
+                .likeText {
+                  font-size: 12px;
+                  color: #a4a4a4;
+                }
+              }
+
+              .textBox {
+                font-size: 13px;
+                line-height: 18px;
+                margin-bottom: 20px;
+              }
+
+              .reviewThumbnail {
+                margin-bottom: 20px;
+
+                .reviewImg {
+                  display: inline-block;
+                  width: 128px;
+                  height: 128px;
+                  background-image: url("https://assets9.cre.ma/p/rawrow-com/reviews/00/00/00/33/37/image2/thumbnail_c7d85e5bca25f3a5.jpg");
+                  background-size: cover;
+                  margin-right: 12px;
+                }
+              }
+
+              .commentBox {
+                display: flex;
+                align-items: center;
+                font-size: 12px;
+
+                span {
+                  display: inline-block;
+                }
+
+                .moreComment {
+                  display: flex;
+                  justify-content: space-between;
+                  width: 290px;
+
+                  :first-child {
+                    color: #cccccc;
+                    font-weight: 600;
+                  }
+
+                  :last-child {
+                    color: #7b7b7b;
+                  }
+                }
+
+                .opinionBtn {
+                  display: flex;
+                  justify-content: space-between;
+                  width: 160px;
+                  height: 24px;
+                  font-size: 12px;
+                  margin-left: 14px;
+
+                  span {
+                    @include flexCenter;
+                    width: 52px;
+                    height: 100%;
+                    border-radius: 2px;
+                    border: 1px solid rgb(210, 210, 210);
+                  }
+
+                  .add {
+                    width: 32px;
+                    margin-left: 10px;
+                    color: white;
+                    background-color: #5e5e5e;
+                    border-radius: 4px;
+                    border: 0;
+                  }
+                }
+              }
+            }
+
+            .reviewInfo {
+              @include flexColumn;
+              width: 25%;
+              font-size: 13px;
+
+              :first-child {
+              }
+
+              .userDate {
+                height: 60px;
+                @include flexColumn;
+                justify-content: center;
+
+                &:first-child {
+                  border-bottom: 1px solid rgb(210, 210, 210);
+                  margin-bottom: 4px;
+                }
+
+                p {
+                  margin-bottom: 5px;
+                  color: #a8a8a8;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .infoSection {
+      @include flexColumn;
+      width: 30%;
+      height: 730px;
+      position: sticky;
+      top: 160px;
+      padding: 0 30px;
+      overflow-y: scroll;
+
+      ul {
+        font-weight: 500;
+        color: #111111;
+        font-size: 22px;
+        margin-bottom: 12px;
+
+        .productTitle {
+          font-size: 34px;
+          margin-bottom: 60px;
+        }
+
+        .mainPrice {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+
+        .lineThrough {
+          text-decoration: line-through;
+        }
+
+        .salePrice {
+          margin-bottom: 10px;
+          span {
+            color: #ff5100;
+          }
+        }
+
+        .pointText {
+          margin-bottom: 10px;
+        }
+
+        .subText {
+          color: navy;
+        }
+      }
+
+      .productColor {
+        margin-bottom: 20px;
+        img {
+          width: 65px;
+          height: 65px;
+          margin: 6px 10px 6px 0;
+          background-size: cover;
+          border: 2px solid black;
+        }
+      }
+
+      .orderCounter {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 30px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+
+        .countTitle {
+          width: 50%;
+        }
+
+        .counter {
+          display: flex;
+          justify-content: center;
+          width: 25%;
+          span {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            border: 2px solid black;
+
+            &:nth-child(2) {
+              border-right: 0;
+              border-left: 0;
+            }
+          }
+        }
+
+        .pricePoint {
+          width: 20%;
+          text-align: right;
+        }
+      }
+
+      .finalPrice {
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .orderBox {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 500;
+        margin-bottom: 50px;
+
+        .buyNow {
+          height: 40px;
+          margin-bottom: 5px;
+          color: white;
+          background-color: black;
+          padding: 8px;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .addCart {
+          height: 40px;
+          border: 2px solid black;
+          background-color: white;
+          padding: 8px;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      .description {
+        font-size: 16px;
+        margin-bottom: 30px;
+
+        .orange {
+          color: #ff5100;
+        }
+
+        p {
+          margin-bottom: 5px;
+          line-height: 20px;
+        }
+
+        .bold {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
