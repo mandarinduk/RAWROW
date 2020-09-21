@@ -22,7 +22,7 @@ class Login extends React.Component {
     else if (memberPw.length < 4)
       return alert("패스워드 항목이 4자(개) 이상으로 해주십시오.");
 
-    fetch("http://10.58.3.118:8002/user/login", {
+    fetch("http://10.58.5.137:8002/login", {
       method: "POST",
       body: JSON.stringify({
         userid: this.state.memberId,
@@ -35,7 +35,7 @@ class Login extends React.Component {
           localStorage.setItem("token", result.Authorization);
           alert("로그인 성공");
           this.props.history.push("/main");
-        } else if (result.messgae === "UNAUTHORIZED") {
+        } else if (result.messgae === "INVALID_USER") {
           alert("아이디나 비밀번호를 확인해주세요");
         }
       });
@@ -101,14 +101,10 @@ class Login extends React.Component {
             </li>
           </ul>
           <ul className="button">
+            <li>아이디 찾기</li>
+            <li>비밀번호 찾기</li>
             <li>
-              <Link to="#none">아이디 찾기</Link>
-            </li>
-            <li>
-              <Link to="#none">비밀번호 찾기</Link>
-            </li>
-            <li>
-              <Link to="#none">회원 가입</Link>
+              <Link to="/signup">회원 가입</Link>
             </li>
           </ul>
         </article>
