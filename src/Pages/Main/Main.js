@@ -17,7 +17,7 @@ class Main extends React.Component {
   //   });
   //   // console.log(window.pageYOffset, "windowPageY");
 
-  //   if (this.state.scrollValue > 218) {
+  //   if (this.state.scrollValue > 218 && this.state.scrollValue < 400) {
   //     console.log("나는 218위치다.");
   //   }
   // };

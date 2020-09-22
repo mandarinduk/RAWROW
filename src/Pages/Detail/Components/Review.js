@@ -29,7 +29,7 @@ class Review extends React.Component {
                   <ul>
                     {[5, 4, 3, 2, 1].map((el, i) => {
                       return (
-                        <li>
+                        <li key={el}>
                           <span>{el} Stars</span>
                           <span className={i === 0 ? "orangeGraph" : ""}></span>
                           <span>{`(${i === 0 ? 1 : 0})`}</span>

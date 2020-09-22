@@ -241,15 +241,18 @@
                   font-size: 16px;
                   font-weight: 700;
                 }
+
                 &:nth-child(2) {
                   margin-left: 10px;
                   font-size: 16px;
                 }
+
                 &:nth-child(3) {
                   margin-left: 30px;
                   font-size: 13px;
                   color: #949494;
                 }
+
                 &:nth-child(4) {
                   margin-left: 30px;
                   font-size: 13px;
@@ -370,9 +373,6 @@
               width: 25%;
               font-size: 13px;
 
-              :first-child {
-              }
-
               .userDate {
                 height: 60px;
                 @include flexColumn;
@@ -403,6 +403,15 @@
       padding: 0 30px;
       overflow-y: scroll;
 
+      .bold {
+        font-weight: 600;
+      }
+
+      p {
+        margin-bottom: 5px;
+        line-height: 20px;
+      }
+
       ul {
         font-weight: 500;
         color: #111111;
@@ -425,6 +434,7 @@
 
         .salePrice {
           margin-bottom: 10px;
+
           span {
             color: #ff5100;
           }
@@ -441,6 +451,7 @@
 
       .productColor {
         margin-bottom: 20px;
+
         img {
           width: 65px;
           height: 65px;
@@ -468,6 +479,7 @@
           display: flex;
           justify-content: center;
           width: 25%;
+
           span {
             display: inline-block;
             width: 20px;
@@ -524,6 +536,7 @@
           }
         }
       }
+
       .description {
         font-size: 16px;
         margin-bottom: 30px;
@@ -531,14 +544,37 @@
         .orange {
           color: #ff5100;
         }
+      }
 
-        p {
-          margin-bottom: 5px;
-          line-height: 20px;
+      .information {
+        .infoBox {
+          height: 30px;
+          overflow: hidden;
+          div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 6px;
+
+            .infoTitle {
+              font-size: 16px;
+              font-weight: 500;
+            }
+
+            .plusMinus {
+              font-size: 30px;
+              font-weight: 400;
+            }
+          }
+
+          .secondPolicy {
+            margin-top: 40px;
+          }
         }
 
-        .bold {
-          font-weight: 600;
+        .activeInfo {
+          height: auto;
         }
       }
     }

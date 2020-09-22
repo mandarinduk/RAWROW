@@ -1,119 +1,255 @@
 import React from "react";
+import InfoTitle from "./Components/InfoTitle";
 import Review from "./Components/Review";
-import { DETAIL_MOCK } from "./data";
+import { DETAIL_DATA, DESC_DATA, CHANGE_DATA } from "./data";
 import "./Detail.scss";
 
 class Detail extends React.Component {
-  render() {
-    console.log(this.state);
-    const {
-      name: relatedName,
-      price: relatedPrice,
-      thumbnail,
-    } = DETAIL_MOCK.related_product_list;
+  constructor() {
+    super();
 
+    this.state = {
+      activeInfo: false,
+      activeNotice: false,
+      activePolicy: false,
+      activeRelated: false,
+      detail: [],
+      count: 1,
+    };
+  }
+
+  handleInfo = (idx) => {
+    this.setState((prev) => {
+      return {
+        [ACTIVE_LIST[idx]]: !prev[ACTIVE_LIST[idx]],
+      };
+    });
+  };
+
+  changePrice = (num) => {
+    if (!num) return 0;
+    return num.toLocaleString();
+  };
+
+  handleCount = (e) => {
+    const { innerText } = e.target;
+    const { count } = this.state;
+
+    if (count > 1 && innerText === "-") {
+      this.setState({
+        count: count - 1,
+      });
+    } else if (innerText === "+") {
+      this.setState({
+        count: count + 1,
+      });
+    }
+  };
+
+  componentDidMount() {
+    fetch(`http://10.58.1.166:8002/detail/202`)
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({
+          detail: result.data[0],
+        });
+      });
+  }
+
+  render() {
     const {
+      detailimage,
       name: mainName,
       price: mainPrice,
-      images,
       sale_price,
       point,
       sub_text,
-      product_color,
-      description,
-      info,
-      notice,
-    } = DETAIL_MOCK;
+      group_thumbnail,
+    } = this.state.detail;
+
+    const { orangeTitle, subTitle, noticeTitle, noticeContent } = DETAIL_DATA;
+
+    const {
+      activeInfo,
+      activeNotice,
+      activePolicy,
+      activeRelated,
+      detail,
+      count,
+    } = this.state;
 
     return (
       <div className="Detail">
-        <div className="detailContents">
-          <div className="imageSection">
-            <div className="productImage">
-              {images.map((el, i) => {
-                return <img key={i} alt="detail" src={el} />;
-              })}
+        {detail && (
+          <div className="detailContents">
+            <div className="imageSection">
+              <div className="productImage">
+                {detailimage?.map((el, i) => {
+                  return (
+                    <img
+                      key={i}
+                      alt="detail"
+                      src={
+                        i === detailimage.length - 1
+                          ? el.slice(2, el.length - 2)
+                          : el.slice(2, el.length - 1)
+                      }
+                    />
+                  );
+                })}
+              </div>
+              <Review />
             </div>
-            <Review />
-          </div>
-          <div className="infoSection">
-            <ul className="titleList">
-              <li className="productTitle">{mainName} NAVY </li>
-              <li
-                className={sale_price ? "mainPrice lineThrough" : "mainPrice"}
-              >
-                {mainPrice.toLocaleString()}원
-              </li>
-              {sale_price !== 0 && (
-                <li className="salePrice">
-                  <span>{sale_price.toLocaleString()}원</span>
+            <div className="infoSection">
+              <ul className="titleList">
+                <li className="productTitle">{mainName}</li>
+                {mainPrice && (
+                  <li
+                    className={
+                      sale_price ? "mainPrice lineThrough" : "mainPrice"
+                    }
+                  >
+                    {this.changePrice(mainPrice)}원
+                  </li>
+                )}
+                {sale_price !== 0 && (
+                  <li className="salePrice">
+                    {sale_price && (
+                      <span>{this.changePrice(sale_price)}원</span>
+                    )}
+                    <span>
+                      {` ${parseInt(
+                        ((mainPrice - sale_price) / mainPrice) * 100
+                      )}%`}
+                    </span>
+                  </li>
+                )}
+                <li className="pointText">
+                  {point && <span>{this.changePrice(point)}P</span>}
                   <span>
-                    {` ${parseInt(
-                      ((mainPrice - sale_price) / mainPrice) * 100
-                    )}%`}
+                    {` (${parseInt(
+                      (point / (sale_price === 0 ? mainPrice : sale_price)) *
+                        100
+                    )}%)`}
                   </span>
                 </li>
+                {sub_text && <li className="subText">{sub_text}</li>}
+              </ul>
+              <div className="productColor">
+                {group_thumbnail?.map((el, i) => {
+                  return <img key={i} alt="img" src={el} />;
+                })}
+              </div>
+              <div className="orderCounter">
+                <div className="countTitle">{mainName}</div>
+                <div className="counter">
+                  <span onClick={this.handleCount}>-</span>
+                  <span>{count}</span>
+                  <span onClick={this.handleCount}>+</span>
+                </div>
+                <div className="pricePoint">
+                  {mainPrice && (
+                    <div>{this.changePrice(mainPrice * count)}원</div>
+                  )}
+                  {point && (
+                    <div>{`(${this.changePrice(point * count)}P)`}</div>
+                  )}
+                </div>
+              </div>
+              {mainPrice && (
+                <div className="finalPrice">{`총 상품금액 : ${this.changePrice(
+                  (sale_price ? sale_price : mainPrice) * count
+                )}원`}</div>
               )}
-              <li className="pointText">
-                <span>{point.toLocaleString()}P</span>
-                <span>
-                  {` (${parseInt(
-                    (point / (sale_price === 0 ? mainPrice : sale_price)) * 100
-                  )}%)`}
-                </span>
-              </li>
-              {sub_text.length && <li className="subText">{sub_text}</li>}
-            </ul>
-            <div className="productColor">
-              {product_color.map((el) => {
-                return <img alt="img" src={el} />;
-              })}
-            </div>
-            <div className="orderCounter">
-              <div className="countTitle">{mainName}</div>
-              <div className="counter">
-                <span>-</span>
-                <span>1</span>
-                <span>+</span>
+              <div className="orderBox">
+                <div className="buyNow">BUY NOW</div>
+                <div className="addCart">ADD TO CART</div>
               </div>
-              <div className="pricePoint">
-                <div>{mainPrice.toLocaleString()}원</div>
-                <div>{`(${point.toLocaleString()}P)`}</div>
+              <div className="description">
+                <p>
+                  <span className="orange bold">{orangeTitle}</span>
+                  <span className="bold">{subTitle}</span>
+                </p>
+                {DESC_DATA?.map((el, i) => {
+                  return (
+                    <div key={i}>
+                      <p className="bold">{el.contentTitle}</p>
+                      <p>{el.content}</p>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
-            <div className="finalPrice">{`총 상품금액 : ${mainPrice.toLocaleString()}원`}</div>
-            <div className="orderBox">
-              <div className="buyNow">BUY NOW</div>
-              <div className="addCart">ADD TO CART</div>
-            </div>
-            <div className="description">
-              <p>
-                <span className="orange bold">STRING CANVAS SERIES </span>
-                <span className="bold"> with SEOULMADE</span>
-              </p>
-              <p className="bold">EASY OPEN AND CLOSE</p>
-              <p>
-                스트링을 당기고 풀면서 쉽게 여닫을 수 있고, 입구가 넓어 물건을
-                넣고 뺄 때도 편리합니다.
-              </p>
-              <p className="bold">WAXED CANVAS</p>
-              <p>
-                왁스를 코팅해 내구성과 발수성을 높인 왁스드 원단. 쓸수록
-                습관으로 만들어진 주름이 드러나고, 자연스럽게 사용감이
-                반영됩니다.
-              </p>
-
-              <p className="bold">DOUBLE FASTENING</p>
-              <p>
-                본체 고리에 한 번 더 끈을 걸면 스트링이 쉽게 풀리거나 가방이
-                벌어지지 않습니다.
-              </p>
+              <div className="information">
+                <div className={activeInfo ? "infoBox activeInfo" : "infoBox"}>
+                  <InfoTitle
+                    handler={() => this.handleInfo(0)}
+                    active={activeInfo}
+                    title={"INFO"}
+                  />
+                  <p>MATERIAL : COTTON 100%</p>
+                  <p>WEIGHT : 650g</p>
+                  <p>SIZE : W 30 x H 48 x D 14.5 cm</p>
+                </div>
+                <div
+                  className={activeNotice ? "infoBox activeInfo" : "infoBox"}
+                >
+                  <InfoTitle
+                    handler={() => this.handleInfo(1)}
+                    active={activeNotice}
+                    title={"NOTICE"}
+                  />
+                  <p className="bold">{noticeTitle}</p>
+                  <p>{noticeContent}</p>
+                </div>
+                <div
+                  className={activePolicy ? "infoBox activeInfo" : "infoBox"}
+                >
+                  <InfoTitle
+                    handler={() => this.handleInfo(2)}
+                    active={activePolicy}
+                    title={"POLICY"}
+                  />
+                  {CHANGE_DATA?.map((el, i) => {
+                    return (
+                      <div key={i}>
+                        <p
+                          className={
+                            i === 0
+                              ? "bold"
+                              : i === 5
+                              ? "bold secondPolicy"
+                              : ""
+                          }
+                        >
+                          {el}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div
+                  className={activeRelated ? "infoBox activeInfo" : "infoBox"}
+                >
+                  <InfoTitle
+                    handler={() => this.handleInfo(3)}
+                    active={activeRelated}
+                    title={"RELATED"}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
 }
 
 export default Detail;
+
+const ACTIVE_LIST = [
+  "activeInfo",
+  "activeNotice",
+  "activePolicy",
+  "activeRelated",
+];
