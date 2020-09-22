@@ -1,7 +1,12 @@
 import React from "react";
 import InfoTitle from "./Components/InfoTitle";
 import Review from "./Components/Review";
-import { DETAIL_DATA, DESC_DATA, CHANGE_DATA } from "./data";
+import {
+  DETAIL_DATA,
+  DESC_DATA,
+  CHANGE_DATA,
+  related_product_list_test,
+} from "./data";
 import "./Detail.scss";
 
 class Detail extends React.Component {
@@ -47,7 +52,7 @@ class Detail extends React.Component {
   };
 
   componentDidMount() {
-    fetch(`http://10.58.1.166:8002/detail/202`)
+    fetch(`http://10.58.1.166:8002/product/202`)
       .then((res) => res.json())
       .then((result) => {
         this.setState({
@@ -58,18 +63,6 @@ class Detail extends React.Component {
 
   render() {
     const {
-      detailimage,
-      name: mainName,
-      price: mainPrice,
-      sale_price,
-      point,
-      sub_text,
-      group_thumbnail,
-    } = this.state.detail;
-
-    const { orangeTitle, subTitle, noticeTitle, noticeContent } = DETAIL_DATA;
-
-    const {
       activeInfo,
       activeNotice,
       activePolicy,
@@ -78,13 +71,23 @@ class Detail extends React.Component {
       count,
     } = this.state;
 
+    const {
+      detailimage,
+      name: mainName,
+      price: mainPrice,
+      sale_price,
+      point,
+      sub_text,
+      group_thumbnail,
+    } = detail;
+
     return (
       <div className="Detail">
-        {detail && (
+        {detail.length !== 0 ? (
           <div className="detailContents">
             <div className="imageSection">
               <div className="productImage">
-                {detailimage?.map((el, i) => {
+                {detailimage.map((el, i) => {
                   return (
                     <img
                       key={i}
@@ -103,29 +106,24 @@ class Detail extends React.Component {
             <div className="infoSection">
               <ul className="titleList">
                 <li className="productTitle">{mainName}</li>
-                {mainPrice && (
-                  <li
-                    className={
-                      sale_price ? "mainPrice lineThrough" : "mainPrice"
-                    }
-                  >
-                    {this.changePrice(mainPrice)}원
-                  </li>
-                )}
-                {sale_price !== 0 && (
-                  <li className="salePrice">
-                    {sale_price && (
-                      <span>{this.changePrice(sale_price)}원</span>
-                    )}
-                    <span>
-                      {` ${parseInt(
-                        ((mainPrice - sale_price) / mainPrice) * 100
-                      )}%`}
-                    </span>
-                  </li>
-                )}
+
+                <li
+                  className={sale_price ? "mainPrice lineThrough" : "mainPrice"}
+                >
+                  {this.changePrice(mainPrice)}원
+                </li>
+
+                <li className="salePrice">
+                  <span>{this.changePrice(sale_price)}원</span>
+                  <span>
+                    {` ${parseInt(
+                      ((mainPrice - sale_price) / mainPrice) * 100
+                    )}%`}
+                  </span>
+                </li>
+
                 <li className="pointText">
-                  {point && <span>{this.changePrice(point)}P</span>}
+                  <span>{this.changePrice(point)}P</span>
                   <span>
                     {` (${parseInt(
                       (point / (sale_price === 0 ? mainPrice : sale_price)) *
@@ -133,7 +131,7 @@ class Detail extends React.Component {
                     )}%)`}
                   </span>
                 </li>
-                {sub_text && <li className="subText">{sub_text}</li>}
+                <li className="subText">{sub_text}</li>
               </ul>
               <div className="productColor">
                 {group_thumbnail?.map((el, i) => {
@@ -148,19 +146,16 @@ class Detail extends React.Component {
                   <span onClick={this.handleCount}>+</span>
                 </div>
                 <div className="pricePoint">
-                  {mainPrice && (
-                    <div>{this.changePrice(mainPrice * count)}원</div>
-                  )}
-                  {point && (
-                    <div>{`(${this.changePrice(point * count)}P)`}</div>
-                  )}
+                  <div>{this.changePrice(mainPrice * count)}원</div>
+
+                  <div>{`(${this.changePrice(point * count)}P)`}</div>
                 </div>
               </div>
-              {mainPrice && (
-                <div className="finalPrice">{`총 상품금액 : ${this.changePrice(
-                  (sale_price ? sale_price : mainPrice) * count
-                )}원`}</div>
-              )}
+
+              <div className="finalPrice">{`총 상품금액 : ${this.changePrice(
+                (sale_price ? sale_price : mainPrice) * count
+              )}원`}</div>
+
               <div className="orderBox">
                 <div className="buyNow">BUY NOW</div>
                 <div className="addCart">ADD TO CART</div>
@@ -170,7 +165,7 @@ class Detail extends React.Component {
                   <span className="orange bold">{orangeTitle}</span>
                   <span className="bold">{subTitle}</span>
                 </p>
-                {DESC_DATA?.map((el, i) => {
+                {DESC_DATA.map((el, i) => {
                   return (
                     <div key={i}>
                       <p className="bold">{el.contentTitle}</p>
@@ -209,7 +204,7 @@ class Detail extends React.Component {
                     active={activePolicy}
                     title={"POLICY"}
                   />
-                  {CHANGE_DATA?.map((el, i) => {
+                  {CHANGE_DATA.map((el, i) => {
                     return (
                       <div key={i}>
                         <p
@@ -235,10 +230,36 @@ class Detail extends React.Component {
                     active={activeRelated}
                     title={"RELATED"}
                   />
+                  <ul>
+                    {related_product_list_test.map((el) => {
+                      return (
+                        <li key={el.id}>
+                          <img alt="relatedItem" src={el.thumbnail} />
+                          <div className="itemTitle">{el.name}</div>
+                          <div
+                            className={
+                              el.sale_price
+                                ? "itemPrice priceLine"
+                                : "itemPrice"
+                            }
+                          >
+                            {this.changePrice(el.price)}원
+                          </div>
+                          {el.sale_price !== 0 && (
+                            <div className="itemPrice orange">
+                              {this.changePrice(el.sale_price)}원
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
+        ) : (
+          "Loading..."
         )}
       </div>
     );
@@ -253,3 +274,5 @@ const ACTIVE_LIST = [
   "activePolicy",
   "activeRelated",
 ];
+
+const { orangeTitle, subTitle, noticeTitle, noticeContent } = DETAIL_DATA;

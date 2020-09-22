@@ -47,14 +47,11 @@ class Review extends React.Component {
             <div className="divideLine" />
             <div className="thumnailBox">
               <div>
-                <div className="reviewImg" />
-                <div className="reviewImg" />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((el, i) => {
+                  return (
+                    <div key={i} className={i < 3 ? "reviewImg" : ""}></div>
+                  );
+                })}
               </div>
               <div>이 상품의 포토리뷰 모아보기</div>
             </div>

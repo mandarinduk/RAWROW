@@ -34,3 +34,38 @@ export const CHANGE_DATA = [
   "고객센터 카카오톡 채널 @로우로우",
   "서울시 마포구 어울마당로 36(상수동 318-1), 2층",
 ];
+
+export const related_product_list_test = [
+  {
+    id: 1,
+    thumbnail:
+      "https://www.rawrow.com/web/product/tiny/20200625/2f51a1ffbd8501e8ac8adf56085d10c0.jpg",
+    name: "WEEKEND CROSS 605 BLACK",
+    price: 69000,
+    sale_price: 49000,
+  },
+  {
+    id: 2,
+    thumbnail:
+      "https://www.rawrow.com/web/product/tiny/20200625/e7929bcab933f5376820e80319a9e097.jpg",
+    name: "WEEKEND STRING TOTE 604 WHITE",
+    price: 79000,
+    sale_price: 0,
+  },
+  {
+    id: 3,
+    thumbnail:
+      "https://www.rawrow.com/web/product/tiny/20200625/c3bb72a1c532a661fcc8a745ee1647dc.jpg",
+    name: "WEEKEND BIG TOTE 603 KHAKI",
+    price: 53000,
+    sale_price: 42000,
+  },
+  {
+    id: 4,
+    thumbnail:
+      "https://www.rawrow.com/web/product/tiny/20200625/e7929bcab933f5376820e80319a9e097.jpg",
+    name: "WEEKEND STRING TOTE 604 WHITE",
+    price: 79000,
+    sale_price: 0,
+  },
+];

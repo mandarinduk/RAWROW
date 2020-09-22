@@ -403,6 +403,10 @@
       padding: 0 30px;
       overflow-y: scroll;
 
+      .orange {
+        color: #ff5100;
+      }
+
       .bold {
         font-weight: 600;
       }
@@ -458,6 +462,7 @@
           margin: 6px 10px 6px 0;
           background-size: cover;
           border: 2px solid black;
+          cursor: pointer;
         }
       }
 
@@ -469,7 +474,6 @@
         margin-bottom: 30px;
         font-size: 16px;
         font-weight: 500;
-        cursor: pointer;
 
         .countTitle {
           width: 50%;
@@ -486,10 +490,12 @@
             height: 20px;
             text-align: center;
             border: 2px solid black;
+            cursor: pointer;
 
             &:nth-child(2) {
               border-right: 0;
               border-left: 0;
+              cursor: default;
             }
           }
         }
@@ -519,6 +525,7 @@
           color: white;
           background-color: black;
           padding: 8px;
+          cursor: pointer;
 
           &:hover {
             text-decoration: underline;
@@ -530,6 +537,7 @@
           border: 2px solid black;
           background-color: white;
           padding: 8px;
+          cursor: pointer;
 
           &:hover {
             text-decoration: underline;
@@ -540,10 +548,6 @@
       .description {
         font-size: 16px;
         margin-bottom: 30px;
-
-        .orange {
-          color: #ff5100;
-        }
       }
 
       .information {
@@ -570,6 +574,37 @@
 
           .secondPolicy {
             margin-top: 40px;
+          }
+
+          ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+
+            li {
+              @include flexColumn;
+              width: 175px;
+              height: 275px;
+              margin-bottom: 20px;
+
+              img {
+                width: 100%;
+              }
+
+              .itemTitle {
+                font-size: 16px;
+                margin-bottom: 10px;
+              }
+
+              .itemPrice {
+                font-size: 14px;
+                font-weight: 400;
+              }
+            }
+            .priceLine {
+              text-decoration: line-through;
+            }
           }
         }
 
