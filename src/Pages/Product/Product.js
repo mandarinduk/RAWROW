@@ -20,25 +20,28 @@ class Product extends React.Component {
     fetch(`${api}/products`)
       // fetch("http://localhost:3000/data/productItemListData.json")
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res.data);
-        this.setState({ itemList: res.data });
-      });
+      .then((res) => this.setState({ itemList: res.data }));
   }
 
   componentDidUpdate(preProps, preState) {
     const { category, subCategoryId } = this.state;
-    console.log("this.preState.category: ", preState.category);
-    console.log("this.state.category: ", category);
+    const isAll = category === "ALL";
+    const isNotSubCategory =
+      subCategoryId === "R BAG" ||
+      subCategoryId === "R EYE" ||
+      subCategoryId === "R TRUNK" ||
+      subCategoryId === "ACCESSORY" ||
+      subCategoryId === "CLEARANCE";
+    const isApi = isAll
+      ? `${api}/products`
+      : isNotSubCategory
+      ? `${api}/p?category=${CATEGORY_OBJ[category]}`
+      : `${api}/p?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`;
+
     if (preState.category !== category) {
-      fetch(
-        `${api}/p?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`
-      )
+      fetch(isApi)
         .then((res) => res.json())
-        .then((res) => {
-          console.log(res, "update");
-          this.setState({ itemList: res.data });
-        });
+        .then((res) => this.setState({ itemList: res.data }));
     }
   }
 
@@ -62,25 +65,12 @@ class Product extends React.Component {
     });
   };
 
-  // test = () => {
-  //   fetch("http://10.58.5.137:8002/user/login", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       userid: "hellrowworld",
-  //       password: "1q2w3e4r",
-  //     }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((result) => console.log("결과: ", result))
-  //     .catch((err) => console.log(err));
-  // };
-
   render() {
     const { title, navList, itemList, category } = this.state;
     const isDefaultList =
       title === "ALL" || title === "NEW ARRIVAL" || title === "SALE";
     const isDefault = isDefaultList ? DEFAULT_LIST : navList;
-    console.log(this.state.subCategoryId);
+
     return (
       <div className="Product">
         <div className="titleCenter">
@@ -92,10 +82,7 @@ class Product extends React.Component {
             }
           >
             {title}
-            <div
-              className="titleBackground"
-              // style={{ transform: "translate(0%, 0%)" }}
-            ></div>
+            <div className="titleBackground"></div>
           </div>
         </div>
         <div className="category">
@@ -213,4 +200,6 @@ const SUB_CATEGORY_OBJ = {
   TOTE1: 21,
   POUCH1: 22,
   TRUNK: 23,
+  SALE: 25,
+  "NEW ARRIVAL": 26,
 };
