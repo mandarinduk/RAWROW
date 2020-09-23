@@ -1,6 +1,7 @@
 import React from "react";
 import InfoTitle from "./Components/InfoTitle";
 import Review from "./Components/Review";
+import { api } from "../../config/api";
 import {
   DETAIL_DATA,
   DESC_DATA,
@@ -18,7 +19,7 @@ class Detail extends React.Component {
       activeNotice: false,
       activePolicy: false,
       activeRelated: false,
-      detail: [],
+      detail: {},
       count: 1,
     };
   }
@@ -52,12 +53,14 @@ class Detail extends React.Component {
   };
 
   componentDidMount() {
-    fetch(`http://10.58.1.166:8002/product/202`)
+    fetch(`${api}/product?detail=202`)
       .then((res) => res.json())
       .then((result) => {
-        this.setState({
-          detail: result.data[0],
-        });
+        setTimeout(() => {
+          this.setState({
+            detail: result.data[0],
+          });
+        }, 1000);
       });
   }
 
@@ -83,7 +86,7 @@ class Detail extends React.Component {
 
     return (
       <div className="Detail">
-        {detail.length !== 0 ? (
+        {Object.keys(detail).length ? (
           <div className="detailContents">
             <div className="imageSection">
               <div className="productImage">
@@ -106,13 +109,11 @@ class Detail extends React.Component {
             <div className="infoSection">
               <ul className="titleList">
                 <li className="productTitle">{mainName}</li>
-
                 <li
                   className={sale_price ? "mainPrice lineThrough" : "mainPrice"}
                 >
                   {this.changePrice(mainPrice)}원
                 </li>
-
                 <li className="salePrice">
                   <span>{this.changePrice(sale_price)}원</span>
                   <span>
@@ -121,7 +122,6 @@ class Detail extends React.Component {
                     )}%`}
                   </span>
                 </li>
-
                 <li className="pointText">
                   <span>{this.changePrice(point)}P</span>
                   <span>
@@ -147,15 +147,12 @@ class Detail extends React.Component {
                 </div>
                 <div className="pricePoint">
                   <div>{this.changePrice(mainPrice * count)}원</div>
-
                   <div>{`(${this.changePrice(point * count)}P)`}</div>
                 </div>
               </div>
-
               <div className="finalPrice">{`총 상품금액 : ${this.changePrice(
                 (sale_price ? sale_price : mainPrice) * count
               )}원`}</div>
-
               <div className="orderBox">
                 <div className="buyNow">BUY NOW</div>
                 <div className="addCart">ADD TO CART</div>
@@ -179,7 +176,7 @@ class Detail extends React.Component {
                   <InfoTitle
                     handler={() => this.handleInfo(0)}
                     active={activeInfo}
-                    title={"INFO"}
+                    title="INFO"
                   />
                   <p>MATERIAL : COTTON 100%</p>
                   <p>WEIGHT : 650g</p>
@@ -259,7 +256,7 @@ class Detail extends React.Component {
             </div>
           </div>
         ) : (
-          "Loading..."
+          <div className="loader" />
         )}
       </div>
     );

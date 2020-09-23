@@ -1,4 +1,5 @@
 import React from "react";
+import { api } from "../../config/api";
 import "./Nav.scss";
 
 class Nav extends React.Component {
@@ -8,7 +9,17 @@ class Nav extends React.Component {
     this.state = {
       searchOn: false,
       popupOn: true,
+      searchResult: [],
     };
+  }
+
+  componentDidMount() {
+    fetch("http://localhost:3000/data/searchData.json")
+      .then((res) => res.json())
+      .then((result) => {
+        // console.log(result.data);
+        this.setState({ searchResult: result.data });
+      });
   }
 
   handleSearch = () => {
@@ -24,7 +35,7 @@ class Nav extends React.Component {
   };
 
   render() {
-    const { searchOn, popupOn } = this.state;
+    const { searchOn, popupOn, searchResult } = this.state;
     return (
       <div className="Nav">
         <div className="navWrapper">
@@ -56,33 +67,29 @@ class Nav extends React.Component {
                   PRODUCT
                 </a>
                 <ul className="productItems">
-                  <li>NEW ARRIVAL</li>
-                  <li>R BAG</li>
-                  <li>R EYE</li>
-                  <li>R TRUNK</li>
-                  <li>ACCESSORY</li>
-                  <li className="orangeItems">CLEARANCE</li>
-                  <li className="orangeItems">SALE</li>
+                  {NAV_TITLE.PRODUCT.map((title, i) => {
+                    return (
+                      <li key={i} className={i > 4 ? "orangeItems" : ""}>
+                        {title}
+                      </li>
+                    );
+                  })}
                 </ul>
               </li>
               <li className="navCenterList">
                 <a href="main">EXPLORE</a>
                 <ul className="exploreItems">
-                  <li>SERIES</li>
-                  <li>PROJECT</li>
-                  <li>NEWS</li>
-                  <li>STOCKIST</li>
-                  <li>ABOUT</li>
+                  {NAV_TITLE.EXPLORE.map((title, i) => {
+                    return <li key={i}>{title}</li>;
+                  })}
                 </ul>
               </li>
               <li className="navCenterList">
                 <a href="main">CENTER</a>
                 <ul className="centerItems">
-                  <li>Q&A</li>
-                  <li>FAQ</li>
-                  <li>LIFETIME WARRANTY</li>
-                  <li>REVIEW</li>
-                  <li>RENTAL SERVICE</li>
+                  {NAV_TITLE.CENTER.map((title, i) => {
+                    return <li key={i}>{title}</li>;
+                  })}
                 </ul>
               </li>
             </ul>
@@ -98,13 +105,28 @@ class Nav extends React.Component {
             <form>
               <input type="text" placeholder="검색어를 입력하세요" />
               <div>
-                <button />
                 <div onClick={this.handleSearch}>
                   <span className="closeBtnOne" />
                   <span className="closeBtnTwo" />
                 </div>
               </div>
             </form>
+          </div>
+          <div className="searchResult searchNone">
+            {searchResult?.map((el) => {
+              return (
+                <div key={el.id} className="resultBox">
+                  <img alt="resultImage" src={el.image} />
+                  <span className="category">{el.category}</span>
+                  <span className="searchName">{el.name}</span>
+                  <div>
+                    <span className="price">{el.price}원</span>
+                    <span className="salePrice">{el.sale_price}원</span>
+                  </div>
+                  <span className="buyNow">BUYNOW</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -113,3 +135,17 @@ class Nav extends React.Component {
 }
 
 export default Nav;
+
+const NAV_TITLE = {
+  PRODUCT: [
+    "NEW ARRIVAL",
+    "R BAG",
+    "R EYE",
+    "R TRUNK",
+    "ACCESSORY",
+    "CLEARANCE",
+    "SALE",
+  ],
+  EXPLORE: ["SERIES", "PROJECT", "NEWS", "STOCKIST", "ABOUT"],
+  CENTER: ["Q&A", "FAQ", "LIFETIME WARRANTY", "REVIEW", "RENTAL SERVICE"],
+};

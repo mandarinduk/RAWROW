@@ -15,7 +15,7 @@ class ItemList extends React.Component {
     return (
       <li className="ItemList">
         <div className="itemImage">
-          <a href="www">
+          <a href="">
             <img className="imgPic" alt="Item Pic" src={itemSrc} />
             {itemHoverSrc && (
               <img
@@ -27,7 +27,7 @@ class ItemList extends React.Component {
           </a>
         </div>
         <div className="itemInfo">
-          <a href="www">
+          <a href="">
             <span>{itemName}</span>
             <span className={itemSalePrice ? "price priceLineOn" : "price"}>
               {itemPrice.toLocaleString()}원
