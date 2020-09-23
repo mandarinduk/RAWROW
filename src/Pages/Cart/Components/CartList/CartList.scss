@@ -1,0 +1,130 @@
+@mixin font {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.CartList {
+  display: flex;
+  position: relative;
+  padding: 20px 0;
+
+  .thumbnail {
+    position: relative;
+    width: 100px;
+
+    input {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 13px;
+      height: 15px;
+    }
+
+    a {
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .listInfo {
+    a {
+      @include font;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .deleteBox {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .delete1 {
+        display: inline-block;
+        position: absolute;
+        right: 5px;
+        width: 10px;
+        height: 2px;
+        background-color: #77797d;
+        transform: rotate(45deg);
+      }
+
+      .delete2 {
+        display: inline-block;
+        position: absolute;
+        right: 5px;
+        width: 10px;
+        height: 2px;
+        background-color: #77797d;
+        transform: rotate(-45deg);
+      }
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+
+      div {
+        display: inline-block;
+        position: relative;
+        border: 2px solid black;
+        width: 20px;
+        height: 20px;
+
+        &:before {
+          display: block;
+          position: absolute;
+          content: "";
+          width: 10px;
+          height: 2px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: #111;
+        }
+
+        &.plus:after {
+          display: block;
+          position: absolute;
+          content: "";
+          width: 2px;
+          height: 10px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: #111;
+        }
+      }
+
+      input {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin-left: -2px;
+        margin-right: -2px;
+        text-align: center;
+        border: 2px solid #111;
+      }
+    }
+
+    .price {
+      @include font;
+      text-decoration: line-through;
+    }
+
+    .salePrice {
+      @include font;
+    }
+
+    div {
+      @include font;
+      text-align: right;
+    }
+  }
+}
