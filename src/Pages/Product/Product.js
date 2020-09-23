@@ -16,13 +16,13 @@ class Product extends React.Component {
 
   componentDidMount() {
     fetch("http://localhost:3000/data/productItemListData.json")
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         this.setState({ itemList: res.data });
       });
   }
 
-  titleChange = (contents) => {
+  titleChange = contents => {
     const isDefaultList =
       contents === "ALL" || contents === "NEW ARRIVAL" || contents === "SALE";
     const isNavList = isDefaultList ? DEFAULT_LIST : LIST_OBJ[contents];
@@ -55,7 +55,7 @@ class Product extends React.Component {
                 key={index}
                 content={content}
                 index={index}
-                nameChange={(contents) => this.titleChange(contents)}
+                nameChange={contents => this.titleChange(contents)}
                 checkTitle={category}
               />
             ))}
