@@ -1,5 +1,4 @@
 import React from "react";
-import { api } from "../../config/api";
 import "./Nav.scss";
 
 class Nav extends React.Component {
@@ -17,7 +16,6 @@ class Nav extends React.Component {
     fetch("http://localhost:3000/data/searchData.json")
       .then((res) => res.json())
       .then((result) => {
-        // console.log(result.data);
         this.setState({ searchResult: result.data });
       });
   }
