@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { api } from "../../config/apis";
 import "./Login.scss";
 
 class Login extends React.Component {
@@ -22,7 +23,7 @@ class Login extends React.Component {
     else if (memberPw.length < 4)
       return alert("패스워드 항목이 4자(개) 이상으로 해주십시오.");
 
-    fetch("http://10.58.5.137:8002/login", {
+    fetch(`${api}/login`, {
       method: "POST",
       body: JSON.stringify({
         userid: this.state.memberId,
