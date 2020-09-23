@@ -8,7 +8,8 @@
 
     ul {
       display: flex;
-      font-size: 15px;
+      font-size: 12px;
+      font-weight: 500;
 
       li {
         padding: 0 5px 11px;
@@ -25,5 +26,40 @@
   .cartList {
     border-top: 2px solid #111;
     border-bottom: 2px solid #111;
+  }
+
+  .cartPrice {
+    display: flex;
+    justify-content: flex-end;
+    div {
+      text-align: right;
+
+      p {
+        font-size: 25px;
+        font-weight: 500;
+        margin-top: 10px;
+        margin-left: 20px;
+      }
+    }
+  }
+
+  .cartButtonBox {
+    display: flex;
+    justify-content: flex-end;
+
+    .cartButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 20%;
+      min-width: 70px;
+      max-width: 200px;
+      height: 30px;
+      margin-top: 20px;
+      background: #111;
+      color: white;
+      font-size: 20px;
+      font-weight: 500;
+    }
   }
 }

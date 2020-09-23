@@ -100,6 +100,10 @@
           transform: translate(-50%, -50%);
           background: #111;
         }
+
+        &:hover {
+          cursor: pointer;
+        }
       }
 
       input {
@@ -121,10 +125,17 @@
     .salePrice {
       @include font;
     }
+  }
+
+  .listPrice {
+    position: absolute;
+    text-align: right;
+    right: 0;
+    bottom: 10px;
+    @include font;
 
     div {
-      @include font;
-      text-align: right;
+      margin-bottom: 5px;
     }
   }
 }

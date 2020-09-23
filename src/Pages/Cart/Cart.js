@@ -3,7 +3,34 @@ import CartList from "./Components/CartList/CartList";
 import "./Cart.scss";
 
 class Cart extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      amount: 1,
+    };
+  }
+
+  handlePlus = () => {
+    const { amount } = this.state;
+
+    this.setState({
+      amount: amount + 1,
+    });
+  };
+
+  handleMinus = () => {
+    const { amount } = this.state;
+
+    if (amount > 1) {
+      this.setState({
+        amount: amount - 1,
+      });
+    }
+  };
+
   render() {
+    const { amount } = this.state;
+
     return (
       <div className="Cart">
         <div className="cartTitle">
@@ -15,11 +42,30 @@ class Cart extends React.Component {
         </div>
         <div className="cartList">
           <ul>
-            <CartList />
+            <CartList
+              amount={amount}
+              handlePlus={this.handlePlus}
+              handleMinus={this.handleMinus}
+            />
           </ul>
         </div>
-        <div className="cartPrice"></div>
-        <div className="cartButton"></div>
+        <div className="cartPrice">
+          <div>
+            <p>PRICE</p>
+            <p>SHIPPING</p>
+            <p>DISCOUNT SEE DETAIL</p>
+            <p>TOTAL</p>
+          </div>
+          <div>
+            <p>99,000원</p>
+            <p>+ 0원</p>
+            <p>0원</p>
+            <p>{(`99000` * amount).toLocaleString()}원</p>
+          </div>
+        </div>
+        <div className="cartButtonBox">
+          <div className="cartButton">ORDER</div>
+        </div>
       </div>
     );
   }

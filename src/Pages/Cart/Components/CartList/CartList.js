@@ -3,6 +3,8 @@ import "./CartList.scss";
 
 class CartList extends React.Component {
   render() {
+    const { amount, handlePlus, handleMinus } = this.props;
+
     return (
       <li className="CartList">
         <div className="thumbnail">
@@ -21,13 +23,15 @@ class CartList extends React.Component {
             <span className="delete2"></span>
           </div>
           <span>
-            <div className="minus"></div>
-            <input type="text" value="1" />
-            <div className="plus"></div>
+            <div className="minus" onClick={handleMinus}></div>
+            <input type="text" value={amount} />
+            <div className="plus" onClick={handlePlus}></div>
           </span>
           <span className="price">99,000원</span>
           <span className="salePrice">99,000원</span>
-          <div>99,000원</div>
+        </div>
+        <div className="listPrice">
+          <div>{(`99000` * amount).toLocaleString()}원</div>
           <div>배송:기본배송 / 무료</div>
         </div>
       </li>
