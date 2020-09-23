@@ -1,6 +1,7 @@
 import React from "react";
 import ProductNavList from "./Components/ProductNavList/ProductNavList";
 import ItemList from "./Components/ItemList/ItemList";
+import { api } from "../../config/api";
 import "./Product.scss";
 
 class Product extends React.Component {
@@ -11,20 +12,42 @@ class Product extends React.Component {
       navList: DEFAULT_LIST,
       itemList: [],
       category: "ALL",
+      subCategoryId: "ALL",
     };
   }
 
   componentDidMount() {
-    fetch("http://10.58.5.137:8002/product")
+    fetch(`${api}/products`)
+      // fetch("http://localhost:3000/data/productItemListData.json")
       .then((res) => res.json())
-      .then((res) => this.setState({ itemList: res.data }));
+      .then((res) => {
+        console.log(res.data);
+        this.setState({ itemList: res.data });
+      });
   }
 
-  componentDidUpdate() {
-    console.log("update");
+  componentDidUpdate(preProps, preState) {
+    const { category, subCategoryId } = this.state;
+    console.log("this.preState.category: ", preState.category);
+    console.log("this.state.category: ", category);
+    if (preState.category !== category) {
+      fetch(
+        `${api}/p?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res, "update");
+          this.setState({ itemList: res.data });
+        });
+    }
   }
 
   titleChange = (contents) => {
+    const OVERLAP_CATEGORY =
+      contents === "BACKPACK" ||
+      contents === "TOTE" ||
+      contents === "CROSS" ||
+      contents === "POUCH";
     const isDefaultList =
       contents === "ALL" || contents === "NEW ARRIVAL" || contents === "SALE";
     const isNavList = isDefaultList ? DEFAULT_LIST : LIST_OBJ[contents];
@@ -34,6 +57,8 @@ class Product extends React.Component {
       title: isNavList ? contents : title,
       navList: isNavList ? isNavList : navList,
       category: contents,
+      subCategoryId:
+        OVERLAP_CATEGORY && title === "CLEARANCE" ? contents + 1 : contents,
     });
   };
 
@@ -55,7 +80,7 @@ class Product extends React.Component {
     const isDefaultList =
       title === "ALL" || title === "NEW ARRIVAL" || title === "SALE";
     const isDefault = isDefaultList ? DEFAULT_LIST : navList;
-
+    console.log(this.state.subCategoryId);
     return (
       <div className="Product">
         <div className="titleCenter">
@@ -67,7 +92,10 @@ class Product extends React.Component {
             }
           >
             {title}
-            <div className="titleBackground"></div>
+            <div
+              className="titleBackground"
+              // style={{ transform: "translate(0%, 0%)" }}
+            ></div>
           </div>
         </div>
         <div className="category">
@@ -102,7 +130,7 @@ class Product extends React.Component {
               itemPrice={item.price}
               itemSalePrice={item.sale_price}
               itemSubText={item.sub_text}
-              itemLastText={this.state.title}
+              itemLastText={title}
             />
           ))}
         </ul>
@@ -149,4 +177,40 @@ const LIST_OBJ = {
   "R TRUNK": R_TRUNK,
   ACCESSORY: ACCESSORY,
   CLEARANCE: CLEARANCE,
+};
+
+const CATEGORY_OBJ = {
+  "NEW ARRIVAL": 1,
+  "R BAG": 2,
+  "R EYE": 3,
+  "R TRUNK": 4,
+  ACCESSORY: 5,
+  CLEARANCE: 6,
+  SALE: 7,
+};
+
+const SUB_CATEGORY_OBJ = {
+  BACKPACK: 1,
+  TOTE: 2,
+  CROSS: 3,
+  POUCH: 4,
+  "ULTRA THIN": 5,
+  THIN: 6,
+  CONDENSE: 7,
+  BOLD: 8,
+  "R SUN": 9,
+  "37L": 10,
+  "63L": 11,
+  "72L": 12,
+  "88L": 13,
+  SET: 14,
+  "TRAVEL ACC": 15,
+  COLLABORATION: 16,
+  WALLET: 17,
+  ETC: 18,
+  BACKPACK1: 19,
+  CROSS1: 20,
+  TOTE1: 21,
+  POUCH1: 22,
+  TRUNK: 23,
 };
