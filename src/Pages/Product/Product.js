@@ -17,7 +17,7 @@ class Product extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${api}/products`)
+    fetch(`${api}/products/list`)
       // fetch("http://localhost:3000/data/productItemListData.json")
       .then((res) => res.json())
       .then((res) => this.setState({ itemList: res.data }));
@@ -33,10 +33,10 @@ class Product extends React.Component {
       subCategoryId === "ACCESSORY" ||
       subCategoryId === "CLEARANCE";
     const isApi = isAll
-      ? `${api}/products`
+      ? `${api}/products/list`
       : isNotSubCategory
-      ? `${api}/p?category=${CATEGORY_OBJ[category]}`
-      : `${api}/p?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`;
+      ? `${api}/products/category/list?category=${CATEGORY_OBJ[category]}`
+      : `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`;
 
     if (preState.category !== category) {
       fetch(isApi)
