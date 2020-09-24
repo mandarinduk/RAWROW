@@ -13,6 +13,7 @@ class CartList extends React.Component {
       salePrice,
       thumbnail,
       handleDelete,
+      cartId,
     } = this.props;
 
     return (
@@ -25,7 +26,7 @@ class CartList extends React.Component {
         </div>
         <div className="listInfo">
           <a href="">{name}</a>
-          <div className="deleteBox" onClick={() => handleDelete(name)}>
+          <div className="deleteBox" onClick={() => handleDelete(cartId)}>
             <span className="delete1"></span>
             <span className="delete2"></span>
           </div>
