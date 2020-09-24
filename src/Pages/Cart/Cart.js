@@ -15,6 +15,21 @@ class Cart extends React.Component {
       });
   }
 
+  handleDelete = (idx) => {
+    const { cartList } = this.state;
+
+    fetch("/data/cartListData.json", {
+      method: "DELETE",
+      body: JSON.stringify({
+        id: cartList[idx].id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        cartList.filter((content) => !content[idx]);
+      });
+  };
+
   handlePlus = (idx) => {
     const { cartList } = this.state;
     const newCartList = cartList.length > 0 && [...cartList];
@@ -91,6 +106,7 @@ class Cart extends React.Component {
                 salePrice={content.sale_price}
                 amount={content.quantity}
                 thumbnail={content.thumbnail_image}
+                handleDelete={this.handleDelete}
                 handlePlus={this.handlePlus}
                 handleMinus={this.handleMinus}
               />
