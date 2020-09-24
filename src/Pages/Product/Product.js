@@ -17,7 +17,7 @@ class Product extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${api}/products/list`)
+    fetch(`${api}/products/list?sort_method=2`)
       // fetch("http://localhost:3000/data/productItemListData.json")
       .then((res) => res.json())
       .then((res) => this.setState({ itemList: res.data }));
