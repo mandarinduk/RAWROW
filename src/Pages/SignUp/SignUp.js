@@ -1,6 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import idData from "./idData";
+import UserTerms from "./Components/UserTerms/UserTerms";
+import SelectOptions from "./Components/SelectOptions/SelectOptions";
+import REGION from "./regionData";
+import PHONE from "./phoneData";
+import MOBILE from "./mobileData";
+import SignUpInput from "./Components/signUpInput/signUpInput";
+import { signUpTitleData } from "./Components/signUpInput/signUpTitleData";
+import {
+  idData,
+  pwData,
+  nameData,
+  mobileData,
+  emailData,
+} from "./basicValidationData";
 import "./SignUp.scss";
 
 class SignUp extends React.Component {
@@ -10,32 +22,60 @@ class SignUp extends React.Component {
     memberRePw: "",
     memberName: "",
     memberAddress: "",
-    // phone: "",
-    // memberMobile: "",
+    memberPhone1: "",
+    memebrPhone2: "",
+    memberMobile1: "",
+    memberMobile2: "",
     memberEmail: "",
-    // gender: "",
-    // birth: "",
-    // region: "",
-    usableId: false,
     idCheck: false,
-    idData: idData,
+    pwGuide: false,
+    pwCheck: false,
+    nameCheck: false,
     idMsg: "",
     pwMsg: "",
-    pwGuide: false,
+    nameMsg: "",
+    idData: idData,
+    pwData: pwData,
+    nameData: nameData,
+    emailData: emailData,
+    phoneList: PHONE,
+    mobileList: MOBILE,
+    regionList: REGION,
+    phoneDigit: "",
+    mobileDigit: "",
+    value: "",
+    children: "",
+    agreeAll: false,
+    useAgree: false,
+    collectAgree: false,
+    smsAgree: false,
+    mailAgree: false,
   };
 
-  handleId = () => {
-    const { memberId } = this.state;
+  handleInput = e => {
+    const { value, name } = e.target;
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => {
+        this.validator();
+      }
+    );
+  };
+
+  validator = () => {
+    const { memberId, memberPw, memberRePw, memberName } = this.state;
     const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
     const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    const capital = /[A-Z]/;
-    // const checkNum = /[0-9]/;
-
+    const english = /^[a-zA-Z]*$/;
+    const upper = /[A-Z]/;
+    const checkNum = /[0-9]/;
+    // id validation
     if (
       memberId.match(regExp) ||
       memberId.match(korean) ||
-      memberId.match(capital)
-      // || memberId.match(checkNum)
+      memberId.match(upper)
     ) {
       this.setState({
         idMsg: idData[3].msg,
@@ -53,19 +93,32 @@ class SignUp extends React.Component {
         idMsg: idData[0].msg,
       });
     }
-  };
+    // password validation
+    if (memberPw !== memberRePw) {
+      this.setState({
+        pwMsg: pwData[1].msg,
+      });
+    }
+    if (memberPw === memberRePw) {
+      this.setState({
+        pwMsg: pwData[0].msg,
+      });
+    }
+    // name validation
+    if (
+      (memberName.match(english) && memberName.match(korean)) ||
+      memberName.length === 0
+    ) {
+      this.setState({
+        nameMsg: nameData[0].msg,
+      });
+    }
 
-  handleInput = e => {
-    const { value, name } = e.target;
-
-    this.setState(
-      {
-        [name]: value,
-      },
-      () => {
-        this.handleId();
-      }
-    );
+    if (memberName.match(regExp) || memberName.match(checkNum)) {
+      this.setState({
+        nameMsg: nameData[1].msg,
+      });
+    }
   };
 
   handleClick = () => {
@@ -75,181 +128,322 @@ class SignUp extends React.Component {
     });
   };
 
-  clickSignUp = () => {
+  clickSignUp = e => {
+    e.preventDefault();
     const {
       memberId,
       memberPw,
       memberRePw,
       memberName,
-      // birth,
       memberAddress,
-      // memberMobile,
+      phoneDigit,
+      memberPhone1,
+      memberPhone2,
+      mobileDigit,
+      memberMobile1,
+      memberMobile2,
       memberEmail,
-      // usableId,
     } = this.state;
+    const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
+    const checkEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    const english = /^[a-zA-Z]*$/;
     if (!memberId) {
       alert("아이디를 입력해주세요.");
+    } else if (memberId.match(regExp) || memberId.match(korean)) {
+      alert(
+        "공백/특수문자가 포함되었거나, 숫자로 시작 또는 숫자로만 이루어진 아이디는 사용할 수 없습니다."
+      );
+    } else if (!memberPw) {
+      alert("비밀번호를 입력해주세요.");
+    } else if (isNaN(Number(memberPw && memberRePw))) {
+      alert("올바른 비밀번호를 입력해주세요.");
+    } else if (!memberRePw) {
+      alert("비밀번호를 입력해주세요.");
+    } else if (memberPw !== memberRePw) {
+      alert("비밀번호가 일치하지 않습니다.");
+    } else if (!memberName) {
+      alert("이름을 입력해주세요.");
+    } else if (!memberName.match(korean) && !memberName.match(english)) {
+      alert("이름은 한글과 영문만 입력 가능합니다.");
+    } else if (!memberAddress) {
+      alert("주소를 입력해주세요.");
+    } else if (!memberPhone1 || !memberPhone2) {
+      alert("일반전화 번호를 입력해주세요.");
     } else if (
-      !memberPw ||
-      !memberRePw ||
-      !memberName ||
-      !memberAddress ||
-      // !memberMobile ||
-      !memberEmail
+      isNaN(Number(memberPhone1)) ||
+      memberPhone1.length < 4 ||
+      isNaN(Number(memberPhone2)) ||
+      memberPhone2.length < 4
     ) {
-      alert("필수항목을 입력해주세요.");
+      alert("올바른 일반전화 번호를 입력해주세요");
+    } else if (!memberMobile1 || !memberMobile2) {
+      alert("휴대폰 번호를 입력해주세요.");
+    } else if (
+      isNaN(Number(memberMobile1)) ||
+      memberMobile1.length < 4 ||
+      isNaN(Number(memberMobile2)) ||
+      memberMobile2.length < 4
+    ) {
+      alert(mobileData[1].msg);
+    } else if (!memberEmail) {
+      alert("이메일을 입력해주세요.");
+    } else if (!memberEmail.match(checkEmail)) {
+      alert(emailData[1].msg);
+    } else if (!this.state.useAgree) {
+      alert("이용약관에 동의 하세요");
+    } else if (!this.state.collectAgree) {
+      return alert("개인정보 수집 및 이용 방침에 동의하세요.");
+    }
+    fetch("http://10.58.5.137:8002/signup", {
+      method: "POST",
+      body: JSON.stringify({
+        userid: memberId,
+        password: memberPw,
+        user_name: memberName,
+        address: memberAddress,
+        telephone: phoneDigit + memberPhone1 + memberPhone2 + "",
+        phonenumber: mobileDigit + memberMobile1 + memberMobile2 + "",
+        email: memberEmail,
+      }),
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.message === "SUCCESS") {
+          localStorage.setItem("token", result.Authorization);
+          alert("회원가입 성공!");
+          this.props.history.push("/main");
+        } else if (result.message === "UNAUTHORIZED") {
+          alert("필수 항목을 입력해주세요");
+        }
+      });
+  };
+
+  useAgreeAll = () => {
+    const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
+    if (
+      // if문 안으로 들어가면 무조건 true!
+      useAgree &&
+      collectAgree &&
+      smsAgree &&
+      mailAgree
+    ) {
+      this.setState({
+        agreeAll: true,
+      });
     } else {
-      alert("환영합니다!");
+      this.setState({
+        agreeAll: false,
+      });
     }
   };
 
+  checkUseAgree = () => {
+    const { useAgree } = this.state;
+
+    this.setState(
+      {
+        useAgree: !useAgree,
+      },
+      () => this.useAgreeAll()
+    );
+  };
+
+  collectAgreeAll = () => {
+    const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
+    if (useAgree && collectAgree && smsAgree && mailAgree) {
+      this.setState({
+        agreeAll: true,
+      });
+    } else {
+      this.setState({
+        agreeAll: false,
+      });
+    }
+  };
+
+  checkCollectAgree = () => {
+    const { collectAgree } = this.state;
+    this.setState(
+      {
+        collectAgree: !collectAgree,
+      },
+      () => this.collectAgreeAll()
+    );
+  };
+
+  smsAgreeAll = () => {
+    const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
+    if (useAgree && collectAgree && smsAgree && mailAgree) {
+      this.setState({
+        agreeAll: true,
+      });
+    } else {
+      this.setState({
+        agreeAll: false,
+      });
+    }
+  };
+
+  checkSmsAgree = () => {
+    const { smsAgree } = this.state;
+    this.setState(
+      {
+        smsAgree: !smsAgree,
+      },
+      () => {
+        this.smsAgreeAll();
+      }
+    );
+  };
+
+  mailAgreeAll = () => {
+    const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
+    if (useAgree && collectAgree && smsAgree && mailAgree) {
+      this.setState({
+        agreeAll: true,
+      });
+    } else {
+      this.setState({
+        agreeAll: false,
+      });
+    }
+  };
+
+  checkMailAgree = () => {
+    const { mailAgree } = this.state;
+    this.setState(
+      {
+        mailAgree: !mailAgree,
+      },
+      () => this.mailAgreeAll()
+    );
+  };
+
+  agreeAllToggle = () => {
+    const { agreeAll } = this.state;
+    this.setState({
+      agreeAll: !agreeAll,
+      useAgree: !agreeAll,
+      collectAgree: !agreeAll,
+      smsAgree: !agreeAll,
+      mailAgree: !agreeAll,
+    });
+  };
+
+  numberSelect = e => {
+    this.setState({
+      phoneDigit: e.target.value,
+      mobileDigit: e.target.value,
+    });
+  };
+
   render() {
+    const {
+      phoneList,
+      mobileList,
+      regionList,
+      idCheck,
+      pwGuide,
+      pwCheck,
+      nameCheck,
+      idMsg,
+      pwMsg,
+      nameMsg,
+    } = this.state;
+
     return (
       <div className="SignUp">
-        <div className="title">
+        <div className="subject">
           <h2>SIGN UP</h2>
         </div>
         <form id="joinForm" name="joinForm">
           <section className="sectionLeft">
-            <div className="list">
-              <span className="standard">아이디 *</span>
-              <div className="desc">
-                <label className="inputIdPw">
-                  <input
-                    maxLength="16"
-                    onKeyUp={this.enterValue}
-                    onChange={this.handleInput}
-                    name="memberId"
-                    type="text"
-                    placeholder="아이디를 입력해주세요."
-                  />
-                  <span
-                    className={
-                      !this.state.idCheck ? "isIdActive idCheck" : "idCheck"
-                    }
-                  >
-                    {this.state.idMsg}
-                  </span>
-                </label>
-              </div>
-            </div>
-            <div className="list">
-              <span className="standard">비밀번호 *</span>
-              <div className="desc">
-                <label className="inputIdPw">
-                  <input
-                    maxLength="20"
-                    onChange={this.handleInput}
-                    onClick={this.handleClick}
-                    name="memberPw"
-                    type="password"
-                    placeholder="비밀번호를 입력해주세요."
-                  />
-                </label>
-                <span
-                  className={
-                    this.state.pwGuide ? "pwGuideNone pwGuide" : "pwGuide"
-                  }
-                >
-                  ※ 비밀번호 입력 조건
-                  <br />
-                  -대소문자/숫자 4자~16자
-                  <br />
-                  -특수문자 및 공백 입력 불가능
-                </span>
-              </div>
-            </div>
-            <div className="list">
-              <span className="standard">비밀번호 확인 *</span>
-              <div className="desc">
-                <label className="inputIdPw">
-                  <input
-                    maxLength="20"
-                    // onClick={this.handleClick}
-                    onChange={this.handleInput}
-                    name="memberRePw"
-                    type="password"
-                    placeholder="비밀번호를 입력해주세요."
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="list">
-              <span className="standard">이름 *</span>
-              <div className="desc">
-                <label className="inputName">
-                  <input
-                    maxLength="10"
-                    // onKeyUp={this.enterValue}
-                    onChange={this.handleInput}
-                    name="memberName"
-                    type="type"
-                    placeholder="이름을 입력해주세요."
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="list">
-              <span className="standard">주소 *</span>
-              <div className="desc">
-                <label className="inputName">
-                  <input
-                    className="address"
-                    maxLength="40"
-                    size="20"
-                    // onKeyUp={this.enterValue}
-                    onChange={this.handleInput}
-                    name="memberAddress"
-                    type="type"
-                    placeholder="주소를 입력해주세요."
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="list">
-              <span className="standard">일반전화</span>
-              <div className="desc">
-                <select id="phone">
-                  <option>02</option>
-                  <option>031</option>
+            {signUpTitleData.map(el => {
+              let validationCheckProp;
+              if (el.name === "memberId") validationCheckProp = !idCheck;
+              if (el.name === "memberPw") validationCheckProp = pwGuide;
+
+              if (el.name === "memberRePw") validationCheckProp = !pwCheck;
+              if (el.name === "memberName") validationCheckProp = !nameCheck;
+              if (el.name === "memberAddress") validationCheckProp = "";
+
+              return (
+                <SignUpInput
+                  {...el}
+                  validationCheckProp={validationCheckProp}
+                  idMsg={idMsg}
+                  pwMsg={pwMsg}
+                  nameMsg={nameMsg}
+                  handleInput={this.handleInput}
+                  handleClick={this.handleClick}
+                />
+              );
+            })}
+
+            <div className="phoneArea">
+              <span className="phone">일반전화 *</span>
+              <div className="phoneDesc">
+                <select className="phoneDropDown" onChange={this.numberSelect}>
+                  {phoneList.map(phone => {
+                    return (
+                      <SelectOptions value={phone.Id} children={phone.name} />
+                    );
+                  })}
                 </select>
-                <span className="hyphen">-</span>
-                <input maxLength="4" className="block" type="text" />
-                <span className="hyphen">-</span>
-                <input maxLength="4" className="block" type="text" />
-              </div>
-            </div>
-            <div className="list">
-              <span className="standard">휴대전화 *</span>
-              <div className="desc">
-                <select className="block">
-                  <option>010</option>
-                  <option>011</option>
-                </select>
-                <span className="hyphen">-</span>
+                <span>-</span>
                 <input
-                  name="memberMobile"
+                  name="memberPhone1"
+                  onChange={this.handleInput}
                   maxLength="4"
-                  className="block"
+                  className="phoneInput"
                   type="text"
                 />
-                <span className="hyphen">-</span>
+                <span>-</span>
                 <input
-                  name="memberMobile"
+                  name="memberPhone2"
+                  onChange={this.handleInput}
                   maxLength="4"
-                  className="block"
+                  className="phoneInput"
                   type="text"
                 />
               </div>
             </div>
-            <div className="list">
-              <span className="standard">이메일 *</span>
-              <div className="desc">
+            <div className="mobileArea">
+              <span className="mobile">휴대전화 *</span>
+              <div className="mobileDesc">
+                <select className="mobileDropDown" onChange={this.numberSelect}>
+                  {mobileList.map(mobile => {
+                    return (
+                      <SelectOptions value={mobile.Id} children={mobile.name} />
+                    );
+                  })}
+                </select>
+                <span>-</span>
+                <input
+                  name="memberMobile1"
+                  maxLength="4"
+                  onChange={this.handleInput}
+                  className="mobileInput"
+                  type="text"
+                />
+                <span>-</span>
+                <input
+                  name="memberMobile2"
+                  maxLength="4"
+                  onChange={this.handleInput}
+                  className="mobileInput"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div className="emailArea">
+              <span className="email">이메일 *</span>
+              <div className="emailDesc">
                 <label>
                   <input
                     maxLength="50"
-                    className="email"
-                    // onKeyUp={this.enterValue}
+                    className="emailInput"
                     onChange={this.handleInput}
                     name="memberEmail"
                     type="text"
@@ -257,9 +451,9 @@ class SignUp extends React.Component {
                 </label>
               </div>
             </div>
-            <div className="list">
-              <span className="standard">성별</span>
-              <div className="desc">
+            <div className="genderArea">
+              <span className="gender">성별</span>
+              <div className="genderDesc">
                 <ul>
                   <li>
                     <input
@@ -280,16 +474,16 @@ class SignUp extends React.Component {
                 </ul>
               </div>
             </div>
-            <div className="list">
-              <span className="standard">생년월일</span>
-              <div className="desc">
-                <div className="birth">
+            <div className="birthdateArea">
+              <span className="birthdate">생년월일</span>
+              <div className="birthdateDesc">
+                <div className="birthdateLine">
                   <input
                     type="radio"
                     id="birthType0"
                     name="birthType"
                     value="S"
-                    checked
+                    defaultChecked
                   />
                   <label htmlFor="birthType0">양력</label>
                   <input
@@ -302,115 +496,52 @@ class SignUp extends React.Component {
                 </div>
                 <input
                   maxLength="4"
-                  className="block1"
+                  className="birthDateInput"
                   placeholder="년"
                   type="text"
                 />
-                <span className="hyphen">-</span>
+                <span>-</span>
                 <input
                   maxLength="2"
-                  className="block1"
+                  className="birthDateInput"
                   placeholder="월"
                   type="text"
                 />
-                <span className="hyphen">-</span>
+                <span>-</span>
                 <input
                   maxLength="2"
-                  className="block1"
+                  className="birthDateInput"
                   placeholder="일"
                   type="text"
                 />
               </div>
             </div>
-            <div className="list">
-              <span className="standard">지역</span>
-              <div className="desc">
-                <select className="region">
-                  {/* <option value="region_00">선택</option> */}
-                  {/* {<option value="region0" onClick={() => this.handleClick(1)}>선택</option>
-                  <option value="region1" onClick={() =>this.handleClick(2)}>서울</option>} */}
+            <div className="regionArea">
+              <span className="region">지역</span>
+              <div className="regionDesc">
+                <select className="regionDropdown">
+                  {regionList.map(region => {
+                    return (
+                      <SelectOptions value={region.Id} children={region.name} />
+                    );
+                  })}
                 </select>
               </div>
             </div>
           </section>
-          <section className="sectionRight">
-            <div className="termsBox allCheck">
-              <label>
-                이용약관 및 개인정보수집 및 이용,
-                <br />
-                쇼핑정보 수신(선택)에 모두 동의합니다.
-              </label>
-              <span className="agreeAll">
-                <input type="checkBox" />
-              </span>
-            </div>
-            <div className="otherTermBox">
-              <span>이용약관 동의 (필수)</span>
-              <div className="termsBox">
-                <p>
-                  제1조(목적)이 약관은 로우로우(전자상거래 사업자)가 운영하는
-                  로우로우 사이버 몰(이하 “몰”이라 한다)에서 제공하는 인터넷
-                  관련 서비스(이하 “서비스”라 한다)를 이용함에 있어 사이버 몰과
-                  이용자의 권리?의무 및 책임사항을 규정함을 목적으로 합니다.
-                </p>
-              </div>
-              <div className="agreeCheck">
-                <span>이용약관에 동의하십니까?</span>
-                <span>
-                  <label htmlFor="agreeService">동의함</label>
-                  <input id="agreeService" name="agree" type="checkbox" />
-                </span>
-              </div>
-            </div>
-            <div className="otherTermBox">
-              <span>개인정보 수집 및 이용 동의 (필수)</span>
-              <div className="termsBox">
-                <p>
-                  {" "}
-                  '로우로우'은 (이하 '회사'는) 고객님의 개인정보를 중요시하며,
-                  "정보통신망 이용촉진 및 정보보호"에 관한 법률을 준수하고
-                  있습니다.
-                </p>
-              </div>
-              <div className="agreeCheck">
-                <span>개인정보 수집 및 이용에 동의하십니까?</span>
-                <span>
-                  <label htmlFor="agreePrivacy">동의함</label>
-                  <input id="agreePrivacy" name="agree" type="checkbox" />
-                </span>
-              </div>
-            </div>
-            <div className="otherTermBox">
-              <span>쇼핑정보 수신 동의 (선택)</span>
-              <div className="termsBox">
-                <p>
-                  할인쿠폰 및 혜택, 이벤트, 신상품 소식 등 쇼핑몰에서 제공하는
-                  유익한 쇼핑정보를 SMS나 이메일로 받아보실 수 있습니다.
-                </p>
-              </div>
-              <div className="agreeCheck">
-                <span>SMS 수신을 동의하십니까?</span>
-                <span>
-                  <input id="agreeSms" name="agree" type="checkbox" />
-                  <label htmlFor="agreeSms">동의함</label>
-                </span>
-              </div>
-              <div className="agreeCheck">
-                <span>이메일 수신을 동의하십니까??</span>
-                <span>
-                  <input id="agreeEmail" name="agree" type="checkbox" />
-                  <label htmlFor="agreeEmail">동의함</label>
-                </span>
-              </div>
-            </div>
-            <div>
-              <Link to="#none">
-                <button onClick={this.clickSignUp} className="joinBtn">
-                  회원가입
-                </button>
-              </Link>
-            </div>
-          </section>
+          <UserTerms
+            agreeAllToggle={this.agreeAllToggle}
+            agreeAll={this.state.agreeAll}
+            checkUseAgree={this.checkUseAgree}
+            useAgree={this.state.useAgree}
+            checkCollectAgree={this.checkCollectAgree}
+            collectAgree={this.state.collectAgree}
+            checkSmsAgree={this.checkSmsAgree}
+            smsAgree={this.state.smsAgree}
+            checkMailAgree={this.checkMailAgree}
+            mailAgree={this.state.mailAgree}
+            clickSignUp={this.clickSignUp}
+          />
         </form>
       </div>
     );
@@ -418,9 +549,3 @@ class SignUp extends React.Component {
 }
 
 export default SignUp;
-
-// const region = ["선택", "서울"];
-// const STATUS = {
-//   1: "이메일을 입력해주세요",
-//   2: "비밀번호를 입력해주세요",
-// };
