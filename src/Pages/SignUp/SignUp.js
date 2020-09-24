@@ -14,8 +14,10 @@ import {
   mobileData,
   emailData,
 } from "./basicValidationData";
+import { api } from "../../config/api";
 import "./SignUp.scss";
 
+// 전체에 사용하는 변수는 class 밖에서 선언하면 global하게 사용 가능
 const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
 const checkEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
@@ -73,7 +75,7 @@ class SignUp extends React.Component {
 
     validLogin({ ...this.state });
 
-    fetch("http://10.58.1.181:8002/signup", {
+    fetch(`${api}/signup`, {
       method: "POST",
       body: JSON.stringify({
         userid: memberId,
@@ -416,6 +418,15 @@ class SignUp extends React.Component {
 
 export default SignUp;
 
+// const validLogin = (
+//   {
+//     // 조건문에 사용할 state를 가져온다.
+//   }
+// ) => {
+//   // 변수 선언할 수 있음. 조건문을 변수에 선언할 수 있음. 와우.
+//   // 조건문
+// };
+
 const validLogin = ({
   memberId,
   memberPw,
@@ -427,6 +438,8 @@ const validLogin = ({
   memberMobile1,
   memberMobile2,
   memberEmail,
+  useAgree,
+  collectAgree,
 }) => {
   const idSpecialEmpty = memberId.match(regExp) || memberId.match(korean);
 
@@ -466,7 +479,6 @@ const validLogin = ({
     return alert(mobileData[1].msg);
   if (!memberEmail) return alert("이메일을 입력해주세요.");
   if (!memberEmail.match(checkEmail)) return alert(emailData[1].msg);
-  if (!this.state.useAgree) return alert("이용약관에 동의 하세요");
-  if (!this.state.collectAgree)
-    return alert("개인정보 수집 및 이용 방침에 동의하세요.");
+  if (!useAgree) return alert("이용약관에 동의 하세요");
+  if (!collectAgree) return alert("개인정보 수집 및 이용 방침에 동의하세요.");
 };

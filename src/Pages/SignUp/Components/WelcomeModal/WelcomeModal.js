@@ -4,7 +4,7 @@ import "./WelcomeModal.scss";
 
 class WelcomeModal extends React.Component {
   render() {
-    const { modal, modalLayer, handleLogin } = this.props;
+    const { modal, modalLayer } = this.props;
 
     return (
       <div>
@@ -34,10 +34,7 @@ class WelcomeModal extends React.Component {
             </div>
           </div>
         </div>
-        <div
-          onClick={handleLogin}
-          className={modalLayer ? "modalLayer active" : "modalLayer"}
-        ></div>
+        <div className={modalLayer ? "modalLayer active" : "modalLayer"}></div>
       </div>
     );
   }
