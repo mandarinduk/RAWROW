@@ -1,0 +1,130 @@
+.WelcomeModal {
+  display: none;
+
+  &.active {
+    display: block;
+    position: fixed;
+    width: 100%;
+    max-width: 1280px;
+    top: 20%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 0px 20px 40px;
+    background-color: white;
+    box-shadow: 0 1px 6px rgb(150, 150, 150);
+    border-radius: 4px;
+    z-index: 10;
+
+    animation-name: effect;
+    animation-duration: 1.5s;
+
+    @keyframes effect {
+      from {
+        margin-top: 20px;
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+
+  .contents {
+    width: 100%;
+    margin: 0 auto;
+
+    .box {
+      text-align: center;
+      margin: 0 auto;
+      padding-top: 30px;
+
+      h1 {
+        font-size: 60px;
+        font-weight: 400px;
+        color: rgb(255, 69, 0);
+      }
+
+      .greeting {
+        padding-top: 35px;
+
+        span {
+          display: block;
+          padding-top: 20px;
+          font-size: 25px;
+          font-weight: 700;
+        }
+      }
+    }
+
+    .btnArea {
+      text-align: center;
+      margin: 0 auto;
+
+      .btn {
+        display: flex;
+        justify-content: space-evenly;
+
+        .serviceBtn {
+          width: 30%;
+          padding: 15px 0;
+          margin-top: 40px;
+          color: white;
+          background-color: black;
+          border: none;
+          outline: none;
+          font-size: 25px;
+          font-weight: 500;
+          cursor: pointer;
+        }
+
+        .loginBtn {
+          width: 30%;
+          padding: 15px 0;
+          margin-top: 40px;
+          background-color: black;
+          border: none;
+          outline: none;
+          font-size: 25px;
+          font-weight: 500;
+          text-decoration: none;
+          cursor: pointer;
+
+          .link {
+            display: flex;
+            justify-content: center;
+            flex: 1;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+.modalLayer {
+  display: none;
+
+  &.active {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(239, 239, 239, 0.8);
+    z-index: 1;
+
+    animation-name: effect;
+    animation-duration: 1.5s;
+
+    @keyframes effect {
+      from {
+        margin-top: 20px;
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+}

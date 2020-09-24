@@ -2,6 +2,16 @@ import React, { Component } from "react";
 
 class UserTerms extends Component {
   render() {
+    const {
+      agreeAllToggle,
+      agreeAll,
+      checkAgree,
+      useAgree,
+      collectAgree,
+      smsAgree,
+      mailAgree,
+      clickSignUp,
+    } = this.props;
     return (
       <section className="sectionRight">
         <div className="termsBox allCheck">
@@ -12,10 +22,10 @@ class UserTerms extends Component {
           </label>
           <span className="agreeAll">
             <input
-              onChange={this.props.agreeAllToggle}
+              onChange={agreeAllToggle}
               name="agreeAll"
               type="checkbox"
-              checked={this.props.agreeAll ? "true" : ""}
+              checked={agreeAll ? "true" : ""}
             />
           </span>
         </div>
@@ -34,10 +44,10 @@ class UserTerms extends Component {
             <span>
               <label htmlFor="agreeService">동의함</label>
               <input
-                onChange={this.props.checkUseAgree}
+                onChange={() => checkAgree("useAgree")}
                 name="useAgree"
                 type="checkbox"
-                checked={this.props.useAgree ? "true" : ""}
+                checked={useAgree ? "true" : ""}
               />
             </span>
           </div>
@@ -55,10 +65,10 @@ class UserTerms extends Component {
             <span>
               <label htmlFor="agreePrivacy">동의함</label>
               <input
-                onChange={this.props.checkCollectAgree}
+                onChange={() => checkAgree("collectAgree")}
                 name="collectAgree"
                 type="checkbox"
-                checked={this.props.collectAgree ? "true" : ""}
+                checked={collectAgree ? "true" : ""}
               />
             </span>
           </div>
@@ -77,8 +87,8 @@ class UserTerms extends Component {
               <input
                 name="smsAgree"
                 type="checkbox"
-                onChange={this.props.checkSmsAgree}
-                checked={this.props.smsAgree ? "true" : ""}
+                onChange={() => checkAgree("smsAgree")}
+                checked={smsAgree ? "true" : ""}
               />
               <label htmlFor="agreeSms">동의함</label>
             </span>
@@ -89,15 +99,15 @@ class UserTerms extends Component {
               <input
                 name="mailAgree"
                 type="checkbox"
-                onChange={this.props.checkMailAgree}
-                checked={this.props.mailAgree ? "true" : ""}
+                onChange={() => checkAgree("mailAgree")}
+                checked={mailAgree ? "true" : ""}
               />
               <label htmlFor="agreeEmail">동의함</label>
             </span>
           </div>
         </div>
         <div>
-          <button onClick={this.props.clickSignUp} className="joinBtn">
+          <button onClick={clickSignUp} className="joinBtn">
             회원가입
           </button>
         </div>
