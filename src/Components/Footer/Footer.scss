@@ -1,0 +1,66 @@
+.Footer {
+  width: 100%;
+  height: 240px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+
+  .footerWrapper {
+    height: 100%;
+    padding-top: 10px;
+    border-top: 2px solid black;
+
+    ul {
+      display: flex;
+      justify-content: space-between;
+
+      height: 100%;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 22px;
+      color: #111111;
+
+      .aboutSection {
+        display: flex;
+        justify-content: space-between;
+        width: 60%;
+
+        .aboutItems {
+          margin-right: 120px;
+
+          div {
+            cursor: pointer;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+
+      .copyrightSection {
+        width: 14%;
+        margin-right: 60px;
+
+        .footerIcon {
+          width: 80px;
+          margin-top: 20px;
+
+          img {
+            width: 30px;
+            height: 30px;
+            margin: 0 5px 5px 0;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .lightBold {
+        font-weight: 600;
+      }
+
+      .bold {
+        font-weight: 800;
+      }
+    }
+  }
+}

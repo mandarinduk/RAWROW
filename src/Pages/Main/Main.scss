@@ -1,0 +1,54 @@
+.Main {
+  padding: 0 20px;
+  margin-bottom: 20px;
+
+  .mainContent {
+    animation-name: effect;
+    animation-duration: 1s;
+
+    @keyframes effect {
+      from {
+        margin-top: 50px;
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    li {
+      margin-bottom: 60px;
+      cursor: pointer;
+      img {
+        width: 100%;
+      }
+
+      .textBox {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+          font-size: 100px;
+          font-weight: 500;
+        }
+
+        div {
+          :first-child {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 2px;
+          }
+          :last-child {
+            font-size: 36px;
+            font-weight: 500;
+          }
+        }
+      }
+
+      &:hover .contentBox {
+        text-decoration: underline;
+      }
+    }
+  }
+}
