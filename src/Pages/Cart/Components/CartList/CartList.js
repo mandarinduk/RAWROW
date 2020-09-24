@@ -3,21 +3,27 @@ import "./CartList.scss";
 
 class CartList extends React.Component {
   render() {
-    const { amount, handlePlus, handleMinus, idx } = this.props;
+    const {
+      amount,
+      handlePlus,
+      handleMinus,
+      idx,
+      name,
+      price,
+      salePrice,
+      thumbnail,
+    } = this.props;
 
     return (
       <li className="CartList">
         <div className="thumbnail">
           <input type="checkbox" />
           <a href="">
-            <img
-              alt="thumbImg"
-              src="https://rawrow.com/web/product/tiny/202009/f23332a67f46de3cdd7062a781341615.jpg"
-            />
+            <img alt="thumbImg" src={thumbnail} />
           </a>
         </div>
         <div className="listInfo">
-          <a href="">STRING CANVAS BACKPACK 701 15 CHARCOAL</a>
+          <a href="">{name}</a>
           <div className="deleteBox">
             <span className="delete1"></span>
             <span className="delete2"></span>
@@ -27,11 +33,17 @@ class CartList extends React.Component {
             <input type="text" value={amount} />
             <div className="plus" onClick={() => handlePlus(idx)}></div>
           </span>
-          <span className="price">99,000원</span>
-          <span className="salePrice">99,000원</span>
+          <span className={salePrice ? "price lineOn" : "price"}>
+            {price.toLocaleString()}원
+          </span>
+          {salePrice !== 0 && (
+            <span className="salePrice">{salePrice.toLocaleString()}원</span>
+          )}
         </div>
         <div className="listPrice">
-          <div>{(`99000` * amount).toLocaleString()}원</div>
+          <div>
+            {((salePrice ? salePrice : price) * amount).toLocaleString()}원
+          </div>
           <div>배송:기본배송 / 무료</div>
         </div>
       </li>
