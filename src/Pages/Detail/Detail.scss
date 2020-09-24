@@ -623,4 +623,52 @@
       }
     }
   }
+
+  .popupCart {
+    @include flexCenter;
+    position: fixed;
+    width: 100%;
+    height: 70%;
+    z-index: 1;
+
+    .messageBox {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 480px;
+      height: 200px;
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 4px;
+      box-shadow: 0 0 4px gray;
+
+      p {
+        height: 70px;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      div {
+        @include flexCenter;
+        width: 180px;
+        height: 40px;
+        border-radius: 4px;
+        color: white;
+        background-color: black;
+        cursor: pointer;
+
+        &:hover {
+          font-weight: 600;
+          color: black;
+          background-color: white;
+          border: 2px solid black;
+        }
+      }
+    }
+  }
+
+  .popupCartOff {
+    display: none;
+  }
 }

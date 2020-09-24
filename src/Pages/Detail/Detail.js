@@ -2,12 +2,7 @@ import React from "react";
 import InfoTitle from "./Components/InfoTitle";
 import Review from "./Components/Review";
 import { api } from "../../config/api";
-import {
-  DETAIL_DATA,
-  DESC_DATA,
-  CHANGE_DATA,
-  related_product_list_test,
-} from "./data";
+import { DETAIL_DATA, DESC_DATA, CHANGE_DATA } from "./data";
 import "./Detail.scss";
 
 class Detail extends React.Component {
@@ -19,9 +14,22 @@ class Detail extends React.Component {
       activeNotice: false,
       activePolicy: false,
       activeRelated: false,
+      activeCartBox: false,
       detail: {},
       count: 1,
     };
+  }
+
+  componentDidMount() {
+    fetch(`${api}/products/202`)
+      .then((res) => res.json())
+      .then((result) => {
+        setTimeout(() => {
+          this.setState({
+            detail: result.data[0],
+          });
+        }, 1000);
+      });
   }
 
   handleInfo = (idx) => {
@@ -52,18 +60,11 @@ class Detail extends React.Component {
     }
   };
 
-  componentDidMount() {
-    fetch(`${api}/products/146`)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        setTimeout(() => {
-          this.setState({
-            detail: result.data[0],
-          });
-        }, 1000);
-      });
-  }
+  handleCartBox = () => {
+    this.setState((prev) => {
+      return { activeCartBox: !prev.activeCartBox };
+    });
+  };
 
   render() {
     const {
@@ -73,6 +74,7 @@ class Detail extends React.Component {
       activeRelated,
       detail,
       count,
+      activeCartBox,
     } = this.state;
 
     const {
@@ -88,6 +90,15 @@ class Detail extends React.Component {
 
     return (
       <div className="Detail">
+        <div
+          className={activeCartBox ? "popupCart" : "popupCart popupCartOff"}
+          onClick={this.handleCartBox}
+        >
+          <div className="messageBox">
+            <p>장바구니에 상품이 담겼습니다.</p>
+            <div>장바구니 바로가기</div>
+          </div>
+        </div>
         {Object.keys(detail).length ? (
           <div className="detailContents">
             <div className="imageSection">
@@ -140,8 +151,14 @@ class Detail extends React.Component {
                 <li className="subText">{sub_text}</li>
               </ul>
               <div className="productColor">
-                {thumbnail_group?.map((el, i) => {
-                  return <img key={i} alt="img" src={el} />;
+                {thumbnail_group?.map((el) => {
+                  return (
+                    <img
+                      key={el.thumbnail_id}
+                      alt="img"
+                      src={el.thumbnail_image}
+                    />
+                  );
                 })}
               </div>
               <div className="orderCounter">
@@ -161,7 +178,9 @@ class Detail extends React.Component {
               )}원`}</div>
               <div className="orderBox">
                 <div className="buyNow">BUY NOW</div>
-                <div className="addCart">ADD TO CART</div>
+                <div className="addCart" onClick={this.handleCartBox}>
+                  ADD TO CART
+                </div>
               </div>
               <div className="description">
                 <p>
@@ -256,28 +275,6 @@ class Detail extends React.Component {
                         </li>
                       );
                     })}
-                    {/* {related_product_list_test.map((el) => {
-                      return (
-                        <li key={el.id}>
-                          <img alt="relatedItem" src={el.thumbnail} />
-                          <div className="itemTitle">{el.name}</div>
-                          <div
-                            className={
-                              el.sale_price
-                                ? "itemPrice priceLine"
-                                : "itemPrice"
-                            }
-                          >
-                            {this.changePrice(el.price)}원
-                          </div>
-                          {el.sale_price !== 0 && (
-                            <div className="itemPrice orange">
-                              {this.changePrice(el.sale_price)}원
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })} */}
                   </ul>
                 </div>
               </div>

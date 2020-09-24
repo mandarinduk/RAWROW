@@ -10,33 +10,19 @@ class Nav extends React.Component {
       searchOn: false,
       popupOn: true,
       searchResult: [],
-      searchVal: "",
     };
   }
 
   handleKeyword = (e) => {
-    // const { value } = e.target;
-
-    this.setState(
-      {
-        searchVal: e.target.value,
-      },
-      () => {
-        const { searchVal } = this.state;
-        fetch(`${api}/products/search?keyword=${searchVal}`)
-          .then((res) => {
-            console.log(res.status);
-            return res.json();
-          })
-          .then((result) => {
-            console.log("1st", searchVal);
-            this.setState({
-              searchResult: result.data,
-            });
-          });
-        console.log("2nd", searchVal);
-      }
-    );
+    fetch(`${api}/products/search?keyword=${e.target.value}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        this.setState({
+          searchResult: result.data,
+        });
+      });
   };
 
   handlePopup = () => {
@@ -52,7 +38,7 @@ class Nav extends React.Component {
   };
 
   render() {
-    const { searchOn, popupOn, searchResult, searchVal } = this.state;
+    const { searchOn, popupOn, searchResult } = this.state;
     return (
       <div className="Nav">
         <div className="navWrapper">
@@ -123,7 +109,6 @@ class Nav extends React.Component {
               <input
                 type="text"
                 placeholder="검색어를 입력하세요"
-                value={searchVal}
                 onChange={this.handleKeyword}
               />
               <div>
@@ -139,7 +124,7 @@ class Nav extends React.Component {
           >
             {searchResult?.map((el) => {
               return (
-                <div key={el.id} className="resultBox">
+                <div key={el.id} className="resultBox" name={el.id}>
                   <img alt="resultImage" src={el.thumbnail} />
                   <span className="category">{el.category}</span>
                   <span className="searchName">{el.name}</span>
