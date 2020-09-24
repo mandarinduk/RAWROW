@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { api } from "../../config/apis";
+import { api } from "../../config/api";
 import "./Login.scss";
 
 class Login extends React.Component {

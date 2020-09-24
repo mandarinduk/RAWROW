@@ -5,13 +5,10 @@ class UserTerms extends Component {
     const {
       agreeAllToggle,
       agreeAll,
-      checkUseAgree,
+      checkAgree,
       useAgree,
-      checkCollectAgree,
       collectAgree,
-      checkSmsAgree,
       smsAgree,
-      checkMailAgree,
       mailAgree,
       clickSignUp,
     } = this.props;
@@ -47,7 +44,7 @@ class UserTerms extends Component {
             <span>
               <label htmlFor="agreeService">동의함</label>
               <input
-                onChange={checkUseAgree}
+                onChange={() => checkAgree("useAgree")}
                 name="useAgree"
                 type="checkbox"
                 checked={useAgree ? "true" : ""}
@@ -68,7 +65,7 @@ class UserTerms extends Component {
             <span>
               <label htmlFor="agreePrivacy">동의함</label>
               <input
-                onChange={checkCollectAgree}
+                onChange={() => checkAgree("collectAgree")}
                 name="collectAgree"
                 type="checkbox"
                 checked={collectAgree ? "true" : ""}
@@ -90,7 +87,7 @@ class UserTerms extends Component {
               <input
                 name="smsAgree"
                 type="checkbox"
-                onChange={checkSmsAgree}
+                onChange={() => checkAgree("smsAgree")}
                 checked={smsAgree ? "true" : ""}
               />
               <label htmlFor="agreeSms">동의함</label>
@@ -102,7 +99,7 @@ class UserTerms extends Component {
               <input
                 name="mailAgree"
                 type="checkbox"
-                onChange={checkMailAgree}
+                onChange={() => checkAgree("mailAgree")}
                 checked={mailAgree ? "true" : ""}
               />
               <label htmlFor="agreeEmail">동의함</label>
