@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./signUpInput.scss";
+// import "../../SignUp.scss";
 
 class SignUpInput extends Component {
   render() {
@@ -21,17 +22,17 @@ class SignUpInput extends Component {
       <div className="basicArea">
         <span className="basicTitle">{title}</span>
         <div className="basicDesc">
-          <label className="basicInput">
-            <input
-              maxLength={maxLength}
-              onChange={handleInput}
-              name={name}
-              // 조건부 렌더링을 태그 전체가 아닌 속성에 줄 때는 다음과 같이 적용할 수 있다.
-              onClick={name === "memberPw" ? handleClick : ""}
-              type={type}
-              placeholder={placeholder}
-            />
-          </label>
+          {/* <label className="basicInput"> */}
+          <input
+            maxLength={maxLength}
+            onChange={handleInput}
+            name={name}
+            // 조건부 렌더링을 태그 전체가 아닌 속성에 줄 때는 다음과 같이 적용할 수 있다.
+            onClick={() => handleClick(name)}
+            type={type}
+            placeholder={placeholder}
+          />
+          {/* </label> */}
 
           {name === "memberId" && validationCheckProp && (
             <span

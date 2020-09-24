@@ -1,5 +1,6 @@
 import React from "react";
 import UserTerms from "./Components/UserTerms/UserTerms";
+import WelcomeModal from "./Components/WelcomeModal/WelcomeModal";
 import SelectOptions from "./Components/SelectOptions/SelectOptions";
 import REGION from "./regionData";
 import PHONE from "./phoneData";
@@ -50,82 +51,8 @@ class SignUp extends React.Component {
     collectAgree: false,
     smsAgree: false,
     mailAgree: false,
-  };
-
-  handleInput = e => {
-    const { value, name } = e.target;
-    this.setState(
-      {
-        [name]: value,
-      },
-      () => {
-        this.validator();
-      }
-    );
-  };
-
-  validator = () => {
-    const { memberId, memberPw, memberRePw, memberName } = this.state;
-    const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
-    const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    const english = /^[a-zA-Z]*$/;
-    const upper = /[A-Z]/;
-    const checkNum = /[0-9]/;
-    // id validation
-    if (
-      memberId.match(regExp) ||
-      memberId.match(korean) ||
-      memberId.match(upper)
-    ) {
-      this.setState({
-        idMsg: idData[3].msg,
-      });
-    } else if (memberId.length === 0) {
-      this.setState({
-        idMsg: idData[1].msg,
-      });
-    } else if (memberId.length < 4 || memberId.length > 16) {
-      this.setState({
-        idMsg: idData[2].msg,
-      });
-    } else {
-      this.setState({
-        idMsg: idData[0].msg,
-      });
-    }
-    // password validation
-    if (memberPw !== memberRePw) {
-      this.setState({
-        pwMsg: pwData[1].msg,
-      });
-    }
-    if (memberPw === memberRePw) {
-      this.setState({
-        pwMsg: pwData[0].msg,
-      });
-    }
-    // name validation
-    if (
-      (memberName.match(english) && memberName.match(korean)) ||
-      memberName.length === 0
-    ) {
-      this.setState({
-        nameMsg: nameData[0].msg,
-      });
-    }
-
-    if (memberName.match(regExp) || memberName.match(checkNum)) {
-      this.setState({
-        nameMsg: nameData[1].msg,
-      });
-    }
-  };
-
-  handleClick = () => {
-    const { pwGuide } = this.state;
-    this.setState({
-      pwGuide: !pwGuide,
-    });
+    modal: false,
+    modalLayer: false,
   };
 
   clickSignUp = e => {
@@ -148,6 +75,7 @@ class SignUp extends React.Component {
     const checkEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     const english = /^[a-zA-Z]*$/;
+
     if (!memberId) {
       alert("아이디를 입력해주세요.");
     } else if (memberId.match(regExp) || memberId.match(korean)) {
@@ -195,7 +123,8 @@ class SignUp extends React.Component {
     } else if (!this.state.collectAgree) {
       return alert("개인정보 수집 및 이용 방침에 동의하세요.");
     }
-    fetch("http://10.58.5.137:8002/signup", {
+
+    fetch("http://10.58.1.181:8002/signup", {
       method: "POST",
       body: JSON.stringify({
         userid: memberId,
@@ -211,12 +140,97 @@ class SignUp extends React.Component {
       .then(result => {
         if (result.message === "SUCCESS") {
           localStorage.setItem("token", result.Authorization);
-          alert("회원가입 성공!");
-          this.props.history.push("/main");
-        } else if (result.message === "UNAUTHORIZED") {
+          this.setState({
+            modal: !this.state.modal,
+            modalLayer: !this.state.modalLayer,
+          });
+
+          // this.props.history.push("/main");
+        } else if (result.message === "INVALID_USER") {
           alert("필수 항목을 입력해주세요");
         }
       });
+  };
+
+  handleLogin = e => {};
+
+  handleInput = e => {
+    const { value, name } = e.target;
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => {
+        this.validator();
+      }
+    );
+  };
+
+  validator = () => {
+    const { memberId, memberPw, memberRePw, memberName } = this.state;
+    const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
+    const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    const english = /^[a-zA-Z]*$/;
+    const upper = /[A-Z]/;
+    const checkNum = /[0-9]/;
+    // id validation
+    if (
+      memberId.match(regExp) ||
+      memberId.match(korean) ||
+      memberId.match(upper) ||
+      memberId.match(checkNum)
+    ) {
+      this.setState({
+        idMsg: idData[3].msg,
+      });
+    } else if (memberId.length === 0) {
+      this.setState({
+        idMsg: idData[1].msg,
+      });
+    } else if (memberId.length < 4 || memberId.length > 16) {
+      this.setState({
+        idMsg: idData[2].msg,
+      });
+    } else {
+      this.setState({
+        idMsg: idData[0].msg,
+      });
+    }
+    // password validation
+    if (memberPw !== memberRePw) {
+      this.setState({
+        pwMsg: pwData[1].msg,
+      });
+    }
+    if (memberPw === memberRePw) {
+      this.setState({
+        pwMsg: pwData[0].msg,
+      });
+    }
+    // name validation
+    if (
+      (memberName.match(english) && memberName.match(korean)) ||
+      memberName.length === 0
+    ) {
+      this.setState({
+        nameMsg: nameData[0].msg,
+      });
+    }
+
+    if (memberName.match(regExp) || memberName.match(checkNum)) {
+      this.setState({
+        nameMsg: nameData[1].msg,
+      });
+    }
+  };
+
+  handleClick = nam => {
+    const { pwGuide } = this.state;
+    if (nam === "memberPw") {
+      this.setState({
+        pwGuide: !pwGuide,
+      });
+    }
   };
 
   useAgreeAll = () => {
@@ -354,12 +368,16 @@ class SignUp extends React.Component {
 
     return (
       <div className="SignUp">
+        <WelcomeModal
+          modalLayer={this.state.modalLayer}
+          modal={this.state.modal}
+        />
         <div className="subject">
           <h2>SIGN UP</h2>
         </div>
         <form id="joinForm" name="joinForm">
           <section className="sectionLeft">
-            {signUpTitleData.map(el => {
+            {signUpTitleData.map((el, i) => {
               let validationCheckProp;
               if (el.name === "memberId") validationCheckProp = !idCheck;
               if (el.name === "memberPw") validationCheckProp = pwGuide;
@@ -370,6 +388,7 @@ class SignUp extends React.Component {
 
               return (
                 <SignUpInput
+                  key={i}
                   {...el}
                   validationCheckProp={validationCheckProp}
                   idMsg={idMsg}
@@ -385,10 +404,8 @@ class SignUp extends React.Component {
               <span className="phone">일반전화 *</span>
               <div className="phoneDesc">
                 <select className="phoneDropDown" onChange={this.numberSelect}>
-                  {phoneList.map(phone => {
-                    return (
-                      <SelectOptions value={phone.Id} children={phone.name} />
-                    );
+                  {phoneList.map((phone, i) => {
+                    return <SelectOptions key={i} children={phone.name} />;
                   })}
                 </select>
                 <span>-</span>
@@ -413,10 +430,8 @@ class SignUp extends React.Component {
               <span className="mobile">휴대전화 *</span>
               <div className="mobileDesc">
                 <select className="mobileDropDown" onChange={this.numberSelect}>
-                  {mobileList.map(mobile => {
-                    return (
-                      <SelectOptions value={mobile.Id} children={mobile.name} />
-                    );
+                  {mobileList.map((mobile, i) => {
+                    return <SelectOptions key={i} children={mobile.name} />;
                   })}
                 </select>
                 <span>-</span>
@@ -520,10 +535,8 @@ class SignUp extends React.Component {
               <span className="region">지역</span>
               <div className="regionDesc">
                 <select className="regionDropdown">
-                  {regionList.map(region => {
-                    return (
-                      <SelectOptions value={region.Id} children={region.name} />
-                    );
+                  {regionList.map((region, i) => {
+                    return <SelectOptions key={i} children={region.name} />;
                   })}
                 </select>
               </div>
@@ -540,6 +553,7 @@ class SignUp extends React.Component {
             smsAgree={this.state.smsAgree}
             checkMailAgree={this.checkMailAgree}
             mailAgree={this.state.mailAgree}
+            handleLogin={this.handleLogin}
             clickSignUp={this.clickSignUp}
           />
         </form>
