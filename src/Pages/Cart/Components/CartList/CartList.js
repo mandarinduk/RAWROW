@@ -3,7 +3,7 @@ import "./CartList.scss";
 
 class CartList extends React.Component {
   render() {
-    const { amount, handlePlus, handleMinus } = this.props;
+    const { amount, handlePlus, handleMinus, idx } = this.props;
 
     return (
       <li className="CartList">
@@ -23,9 +23,9 @@ class CartList extends React.Component {
             <span className="delete2"></span>
           </div>
           <span>
-            <div className="minus" onClick={handleMinus}></div>
+            <div className="minus" onClick={() => handleMinus(idx)}></div>
             <input type="text" value={amount} />
-            <div className="plus" onClick={handlePlus}></div>
+            <div className="plus" onClick={() => handlePlus(idx)}></div>
           </span>
           <span className="price">99,000원</span>
           <span className="salePrice">99,000원</span>

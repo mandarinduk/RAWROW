@@ -6,30 +6,39 @@ class Cart extends React.Component {
   constructor() {
     super();
     this.state = {
-      amount: 1,
+      cartList: [],
     };
   }
 
-  handlePlus = () => {
-    const { amount } = this.state;
+  componentDidMount() {
+    fetch("/data/cartListData.json")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({ cartList: res.data });
+      });
+  }
 
-    this.setState({
-      amount: amount + 1,
-    });
+  handlePlus = (idx) => {
+    const { cartList } = this.state;
+    const newCartList = cartList.length > 0 && [...cartList];
+    newCartList[idx].quantity = newCartList[idx].quantity + 1;
+
+    this.setState({ cartList: newCartList });
   };
 
-  handleMinus = () => {
-    const { amount } = this.state;
+  handleMinus = (idx) => {
+    const { cartList } = this.state;
+    const newCartList = cartList.length > 0 && [...cartList];
+    newCartList[idx].quantity =
+      newCartList[idx].quantity > 1
+        ? newCartList[idx].quantity - 1
+        : newCartList[idx].quantity;
 
-    if (amount > 1) {
-      this.setState({
-        amount: amount - 1,
-      });
-    }
+    this.setState({ cartList: newCartList });
   };
 
   render() {
-    const { amount } = this.state;
+    const { cartList } = this.state;
 
     return (
       <div className="Cart">
@@ -42,11 +51,15 @@ class Cart extends React.Component {
         </div>
         <div className="cartList">
           <ul>
-            <CartList
-              amount={amount}
-              handlePlus={this.handlePlus}
-              handleMinus={this.handleMinus}
-            />
+            {cartList?.map((content, i) => (
+              <CartList
+                key={i}
+                idx={i}
+                amount={content.quantity}
+                handlePlus={this.handlePlus}
+                handleMinus={this.handleMinus}
+              />
+            ))}
           </ul>
         </div>
         <div className="cartPrice">
@@ -60,7 +73,7 @@ class Cart extends React.Component {
             <p>99,000원</p>
             <p>+ 0원</p>
             <p>0원</p>
-            <p>{(`99000` * amount).toLocaleString()}원</p>
+            <p>{(`99000` * cartList.quantity).toLocaleString()}원</p>
           </div>
         </div>
         <div className="cartButtonBox">
