@@ -119,6 +119,9 @@
 
     .price {
       @include font;
+    }
+
+    .lineOn {
       text-decoration: line-through;
     }
 

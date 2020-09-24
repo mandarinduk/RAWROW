@@ -3,50 +3,98 @@ import CartList from "./Components/CartList/CartList";
 import "./Cart.scss";
 
 class Cart extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      amount: 1,
-    };
+  state = {
+    cartList: [],
+  };
+
+  componentDidMount() {
+    fetch("/data/cartListData.json")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({ cartList: res.data });
+      });
   }
 
-  handlePlus = () => {
-    const { amount } = this.state;
+  handlePlus = (idx) => {
+    const { cartList } = this.state;
+    const newCartList = cartList.length > 0 && [...cartList];
+    newCartList[idx].quantity = newCartList[idx].quantity + 1;
 
     this.setState({
-      amount: amount + 1,
+      cartList: newCartList,
     });
   };
 
-  handleMinus = () => {
-    const { amount } = this.state;
+  handleMinus = (idx) => {
+    const { cartList } = this.state;
+    const newCartList = cartList.length > 0 && [...cartList];
+    newCartList[idx].quantity =
+      newCartList[idx].quantity > 1
+        ? newCartList[idx].quantity - 1
+        : newCartList[idx].quantity;
 
-    if (amount > 1) {
-      this.setState({
-        amount: amount - 1,
-      });
+    this.setState({ cartList: newCartList });
+  };
+
+  calPrice = () => {
+    const { cartList } = this.state;
+    let totalPrice = 0;
+
+    for (let i = 0; i < cartList.length; i++) {
+      totalPrice += cartList[i].price * cartList[i].quantity;
     }
+
+    return totalPrice.toLocaleString();
+  };
+
+  calSalePrice = () => {
+    const { cartList } = this.state;
+    let totalSalePrice = 0;
+
+    for (let i = 0; i < cartList.length; i++) {
+      totalSalePrice =
+        (cartList[i].price - cartList[i].sale_price) * cartList[i].quantity;
+    }
+
+    return totalSalePrice.toLocaleString();
+  };
+
+  calTotalPrice = () => {
+    let totalPrice = 0;
+
+    totalPrice =
+      Number(this.calPrice().split(",").join("")) -
+      Number(this.calSalePrice().split(",").join(""));
+    return totalPrice.toLocaleString();
   };
 
   render() {
-    const { amount } = this.state;
+    const { cartList } = this.state;
 
     return (
       <div className="Cart">
         <div className="cartTitle">
           <ul>
-            <li>국내배송상품 (0)</li>
+            <li>국내배송상품 ({cartList.length})</li>
             <li>해외배송상품 (0)</li>
             <p>장바구니에 담긴 상품은 10일 동안 보관됩니다.</p>
           </ul>
         </div>
         <div className="cartList">
           <ul>
-            <CartList
-              amount={amount}
-              handlePlus={this.handlePlus}
-              handleMinus={this.handleMinus}
-            />
+            {cartList?.map((content, i) => (
+              <CartList
+                key={content.name}
+                idx={i}
+                name={content.name}
+                price={content.price}
+                salePrice={content.sale_price}
+                amount={content.quantity}
+                thumbnail={content.thumbnail_image}
+                handlePlus={this.handlePlus}
+                handleMinus={this.handleMinus}
+              />
+            ))}
           </ul>
         </div>
         <div className="cartPrice">
@@ -57,10 +105,10 @@ class Cart extends React.Component {
             <p>TOTAL</p>
           </div>
           <div>
-            <p>99,000원</p>
+            <p>{this.calPrice()}원</p>
             <p>+ 0원</p>
-            <p>0원</p>
-            <p>{(`99000` * amount).toLocaleString()}원</p>
+            <p>{this.calSalePrice()}원</p>
+            <p>{this.calTotalPrice()}원</p>
           </div>
         </div>
         <div className="cartButtonBox">
