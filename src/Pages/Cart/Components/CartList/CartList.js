@@ -25,7 +25,7 @@ class CartList extends React.Component {
         </div>
         <div className="listInfo">
           <a href="">{name}</a>
-          <div className="deleteBox" onClick={() => handleDelete(idx)}>
+          <div className="deleteBox" onClick={() => handleDelete(name)}>
             <span className="delete1"></span>
             <span className="delete2"></span>
           </div>

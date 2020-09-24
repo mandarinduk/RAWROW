@@ -15,19 +15,24 @@ class Cart extends React.Component {
       });
   }
 
-  handleDelete = (idx) => {
+  handleDelete = (name) => {
     const { cartList } = this.state;
 
-    fetch("/data/cartListData.json", {
-      method: "DELETE",
-      body: JSON.stringify({
-        id: cartList[idx].id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        cartList.filter((content) => !content[idx]);
-      });
+    const filteredList = cartList.filter((content) => content.name !== name);
+    this.setState({
+      cartList: filteredList,
+    });
+
+    // fetch("/data/cartListData.json", {
+    //   method: "DELETE",
+    //   body: JSON.stringify({
+    //     id: cartList[idx].id,
+    //   }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     cartList.filter((content) => !content[idx]);
+    //   });
   };
 
   handlePlus = (idx) => {
@@ -67,8 +72,10 @@ class Cart extends React.Component {
     let totalSalePrice = 0;
 
     for (let i = 0; i < cartList.length; i++) {
-      totalSalePrice =
-        (cartList[i].price - cartList[i].sale_price) * cartList[i].quantity;
+      if (cartList[i].sale_price !== 0) {
+        totalSalePrice =
+          (cartList[i].price - cartList[i].sale_price) * cartList[i].quantity;
+      }
     }
 
     return totalSalePrice.toLocaleString();
