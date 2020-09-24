@@ -13,18 +13,20 @@ class Product extends React.Component {
       itemList: [],
       category: "ALL",
       subCategoryId: "ALL",
+      value: "0",
     };
   }
 
   componentDidMount() {
-    fetch(`${api}/products/list?sort_method=2`)
+    const { value } = this.state;
+    fetch(`${api}/products/list?sort_method=${value}`)
       // fetch("http://localhost:3000/data/productItemListData.json")
       .then((res) => res.json())
       .then((res) => this.setState({ itemList: res.data }));
   }
 
   componentDidUpdate(preProps, preState) {
-    const { category, subCategoryId } = this.state;
+    const { category, subCategoryId, value } = this.state;
     const isAll = category === "ALL";
     const isNotSubCategory =
       subCategoryId === "R BAG" ||
@@ -33,13 +35,17 @@ class Product extends React.Component {
       subCategoryId === "ACCESSORY" ||
       subCategoryId === "CLEARANCE";
     const isApi = isAll
-      ? `${api}/products/list`
+      ? `${api}/products/list?sort_method=${value}`
       : isNotSubCategory
       ? `${api}/products/category/list?category=${CATEGORY_OBJ[category]}`
       : `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`;
 
     if (preState.category !== category) {
       fetch(isApi)
+        .then((res) => res.json())
+        .then((res) => this.setState({ itemList: res.data }));
+    } else if (preState.value !== value) {
+      fetch(`${api}/products/list?sort_method=${value}`)
         .then((res) => res.json())
         .then((res) => this.setState({ itemList: res.data }));
     }
@@ -65,8 +71,12 @@ class Product extends React.Component {
     });
   };
 
+  valueCheck = (e) => {
+    this.setState({ value: e.target.value });
+  };
+
   render() {
-    const { title, navList, itemList, category } = this.state;
+    const { title, navList, itemList, category, value } = this.state;
     const isDefaultList =
       title === "ALL" || title === "NEW ARRIVAL" || title === "SALE";
     const isDefault = isDefaultList ? DEFAULT_LIST : navList;
@@ -98,12 +108,10 @@ class Product extends React.Component {
             ))}
           </ul>
           <div>
-            <select>
-              <option>FILTER</option>
-              <option>신상품</option>
-              <option>인기순</option>
-              <option>낮은가격순</option>
-              <option>높은가격순</option>
+            <select value={value} onChange={this.valueCheck}>
+              <option value="0">FILTER</option>
+              <option value="1">낮은가격순</option>
+              <option value="2">높은가격순</option>
             </select>
           </div>
         </div>
