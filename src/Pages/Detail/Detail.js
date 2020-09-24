@@ -53,9 +53,10 @@ class Detail extends React.Component {
   };
 
   componentDidMount() {
-    fetch(`${api}/product?detail=202`)
+    fetch(`${api}/products/146`)
       .then((res) => res.json())
       .then((result) => {
+        console.log(result);
         setTimeout(() => {
           this.setState({
             detail: result.data[0],
@@ -81,7 +82,8 @@ class Detail extends React.Component {
       sale_price,
       point,
       sub_text,
-      group_thumbnail,
+      thumbnail_group,
+      related_group,
     } = detail;
 
     return (
@@ -115,12 +117,16 @@ class Detail extends React.Component {
                   {this.changePrice(mainPrice)}원
                 </li>
                 <li className="salePrice">
-                  <span>{this.changePrice(sale_price)}원</span>
-                  <span>
-                    {` ${parseInt(
-                      ((mainPrice - sale_price) / mainPrice) * 100
-                    )}%`}
-                  </span>
+                  {sale_price > 0 && (
+                    <>
+                      <span>{this.changePrice(sale_price)}원</span>
+                      <span>
+                        {` ${parseInt(
+                          ((mainPrice - sale_price) / mainPrice) * 100
+                        )}%`}
+                      </span>
+                    </>
+                  )}
                 </li>
                 <li className="pointText">
                   <span>{this.changePrice(point)}P</span>
@@ -134,7 +140,7 @@ class Detail extends React.Component {
                 <li className="subText">{sub_text}</li>
               </ul>
               <div className="productColor">
-                {group_thumbnail?.map((el, i) => {
+                {thumbnail_group?.map((el, i) => {
                   return <img key={i} alt="img" src={el} />;
                 })}
               </div>
@@ -228,7 +234,29 @@ class Detail extends React.Component {
                     title={"RELATED"}
                   />
                   <ul>
-                    {related_product_list_test.map((el) => {
+                    {related_group.map((el) => {
+                      return (
+                        <li key={el.related_id}>
+                          <img alt="relatedItem" src={el.related_thumbnail} />
+                          <div className="itemTitle">{el.related_name}</div>
+                          <div
+                            className={
+                              el.related_sale_price
+                                ? "itemPrice priceLine"
+                                : "itemPrice"
+                            }
+                          >
+                            {this.changePrice(el.related_price)}원
+                          </div>
+                          {el.related_sale_price !== 0 && (
+                            <div className="itemPrice orange">
+                              {this.changePrice(el.related_sale_price)}원
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                    {/* {related_product_list_test.map((el) => {
                       return (
                         <li key={el.id}>
                           <img alt="relatedItem" src={el.thumbnail} />
@@ -249,7 +277,7 @@ class Detail extends React.Component {
                           )}
                         </li>
                       );
-                    })}
+                    })} */}
                   </ul>
                 </div>
               </div>

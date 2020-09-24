@@ -1,4 +1,5 @@
 import React from "react";
+import { api } from "../../config/api";
 import "./Nav.scss";
 
 class Nav extends React.Component {
@@ -9,21 +10,33 @@ class Nav extends React.Component {
       searchOn: false,
       popupOn: true,
       searchResult: [],
+      searchVal: "",
     };
   }
 
-  componentDidMount() {
-    fetch("http://localhost:3000/data/searchData.json")
-      .then((res) => res.json())
-      .then((result) => {
-        this.setState({ searchResult: result.data });
-      });
-  }
+  handleKeyword = (e) => {
+    // const { value } = e.target;
 
-  handleSearch = () => {
-    this.setState((prev) => {
-      return { searchOn: !prev.searchOn };
-    });
+    this.setState(
+      {
+        searchVal: e.target.value,
+      },
+      () => {
+        const { searchVal } = this.state;
+        fetch(`${api}/products/search?keyword=${searchVal}`)
+          .then((res) => {
+            console.log(res.status);
+            return res.json();
+          })
+          .then((result) => {
+            console.log("1st", searchVal);
+            this.setState({
+              searchResult: result.data,
+            });
+          });
+        console.log("2nd", searchVal);
+      }
+    );
   };
 
   handlePopup = () => {
@@ -32,8 +45,14 @@ class Nav extends React.Component {
     });
   };
 
+  handleSearch = () => {
+    this.setState((prev) => {
+      return { searchOn: !prev.searchOn };
+    });
+  };
+
   render() {
-    const { searchOn, popupOn, searchResult } = this.state;
+    const { searchOn, popupOn, searchResult, searchVal } = this.state;
     return (
       <div className="Nav">
         <div className="navWrapper">
@@ -100,8 +119,13 @@ class Nav extends React.Component {
             </ul>
           </div>
           <div className={searchOn ? "search searchOn" : "search"}>
-            <form>
-              <input type="text" placeholder="검색어를 입력하세요" />
+            <form onSubmit={(e) => e.preventDefault()}>
+              <input
+                type="text"
+                placeholder="검색어를 입력하세요"
+                value={searchVal}
+                onChange={this.handleKeyword}
+              />
               <div>
                 <div onClick={this.handleSearch}>
                   <span className="closeBtnOne" />
@@ -110,16 +134,22 @@ class Nav extends React.Component {
               </div>
             </form>
           </div>
-          <div className="searchResult searchNone">
+          <div
+            className={searchOn ? "searchResult" : "searchResult searchNone"}
+          >
             {searchResult?.map((el) => {
               return (
                 <div key={el.id} className="resultBox">
-                  <img alt="resultImage" src={el.image} />
+                  <img alt="resultImage" src={el.thumbnail} />
                   <span className="category">{el.category}</span>
                   <span className="searchName">{el.name}</span>
                   <div>
-                    <span className="price">{el.price}원</span>
-                    <span className="salePrice">{el.sale_price}원</span>
+                    <span className={el.sale_price > 0 ? "price" : ""}>
+                      {el.price}원
+                    </span>
+                    {el.sale_price > 0 && (
+                      <span className="salePrice">{el.sale_price}원</span>
+                    )}
                   </div>
                   <span className="buyNow">BUYNOW</span>
                 </div>

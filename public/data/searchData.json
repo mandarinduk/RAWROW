@@ -2,15 +2,15 @@
   "data": [
     {
       "id": 1,
-      "image": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
       "category": "BACKPACK",
       "name": "STRING CANVAS BACKPACK 701 15 OLIVE",
       "price": 89000,
-      "sale_price": 69000
+      "sale_price": 0
     },
     {
       "id": 2,
-      "image": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
       "category": "BACKPACK",
       "name": "SQUARE 2WAY ORIGINAL BAG 114 CORDURA 15 BLACK",
       "price": 109000,
@@ -18,7 +18,47 @@
     },
     {
       "id": 3,
-      "image": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "category": "BACKPACK",
+      "name": "STRING CANVAS BACKPACK 701 15 OLIVE",
+      "price": 99000,
+      "sale_price": 0
+    },
+    {
+      "id": 4,
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "category": "BACKPACK",
+      "name": "STRING CANVAS BACKPACK 701 15 OLIVE",
+      "price": 99000,
+      "sale_price": 0
+    },
+    {
+      "id": 5,
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "category": "BACKPACK",
+      "name": "STRING CANVAS BACKPACK 701 15 OLIVE",
+      "price": 99000,
+      "sale_price": 59000
+    },
+    {
+      "id": 6,
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "category": "BACKPACK",
+      "name": "STRING CANVAS BACKPACK 701 15 OLIVE",
+      "price": 99000,
+      "sale_price": 59000
+    },
+    {
+      "id": 7,
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
+      "category": "BACKPACK",
+      "name": "STRING CANVAS BACKPACK 701 15 OLIVE",
+      "price": 99000,
+      "sale_price": 59000
+    },
+    {
+      "id": 8,
+      "thumbnail": "https://www.rawrow.com/web/product/medium/202009/46086dc0bbeedd29308b3f6a7fa285d1.jpg",
       "category": "BACKPACK",
       "name": "STRING CANVAS BACKPACK 701 15 OLIVE",
       "price": 99000,

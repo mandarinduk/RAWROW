@@ -19,9 +19,7 @@ class Footer extends React.Component {
                   return (
                     <div
                       key={i}
-                      className={
-                        i < 1 || i >= 4 ? (i >= 4 ? "bold" : "lightBold") : ""
-                      }
+                      className={i === 0 ? "lightBold" : i >= 4 ? "bold" : ""}
                     >
                       {el}
                     </div>

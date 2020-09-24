@@ -230,13 +230,19 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 0 10px;
+    margin: 0 20px;
+    max-height: 280px;
+    overflow: scroll;
+    box-shadow: 0px 2px 4px #a6a6a6;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    transition: 0.5s all;
 
     .resultBox {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 80px;
+      min-height: 80px;
       padding: 0 10px;
       cursor: pointer;
 
@@ -263,6 +269,7 @@
       }
 
       div {
+        width: 230px;
         font-size: 20px;
       }
 
@@ -290,6 +297,6 @@
   }
 
   .searchNone {
-    display: none;
+    height: 0px;
   }
 }
