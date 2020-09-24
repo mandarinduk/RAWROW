@@ -1,6 +1,7 @@
 import React from "react";
 import InfoTitle from "./Components/InfoTitle";
 import Review from "./Components/Review";
+import { Link } from "react-router-dom";
 import { api } from "../../config/api";
 import { DETAIL_DATA, DESC_DATA, CHANGE_DATA } from "./data";
 import "./Detail.scss";
@@ -21,7 +22,8 @@ class Detail extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${api}/products/202`)
+    const { id } = this.props.match.params;
+    fetch(`${api}/products/${id}`)
       .then((res) => res.json())
       .then((result) => {
         setTimeout(() => {
@@ -31,6 +33,41 @@ class Detail extends React.Component {
         }, 1000);
       });
   }
+
+  addToCart = () => {
+    // fetch(`${api}/products/202`. {
+    //   method: "POST",
+    //   headers: {
+    //     Authorization: window.localStorage.getItem("token"),
+    //   },
+    //   body: JSON.stringify({
+    //     product_id: window.location.href.substr(29),
+    //     count: this.state.count,
+    //   }),
+    // })
+
+    fetch(`${api}/cart`, {
+      method: "POST",
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        product_id: window.location.href.substr(29),
+        quantity: this.state.count,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.message === "INVALID_TOKEN") {
+          alert("로그인이 필요합니다.");
+          this.props.history.push("/login");
+        } else {
+          this.handleCartBox();
+        }
+        // result.cart_list === success
+        // result.message === INVALID_TOKEN
+      });
+  };
 
   handleInfo = (idx) => {
     this.setState((prev) => {
@@ -87,7 +124,6 @@ class Detail extends React.Component {
       thumbnail_group,
       related_group,
     } = detail;
-
     return (
       <div className="Detail">
         <div
@@ -96,7 +132,9 @@ class Detail extends React.Component {
         >
           <div className="messageBox">
             <p>장바구니에 상품이 담겼습니다.</p>
-            <div>장바구니 바로가기</div>
+            <Link to={`/cart`}>
+              <div>장바구니 바로가기</div>
+            </Link>
           </div>
         </div>
         {Object.keys(detail).length ? (
@@ -153,11 +191,16 @@ class Detail extends React.Component {
               <div className="productColor">
                 {thumbnail_group?.map((el) => {
                   return (
-                    <img
+                    <a
+                      href={`/detail/${el.thumbnail_id}`}
                       key={el.thumbnail_id}
-                      alt="img"
-                      src={el.thumbnail_image}
-                    />
+                    >
+                      <img
+                        key={el.thumbnail_id}
+                        alt="img"
+                        src={el.thumbnail_image}
+                      />
+                    </a>
                   );
                 })}
               </div>
@@ -178,7 +221,7 @@ class Detail extends React.Component {
               )}원`}</div>
               <div className="orderBox">
                 <div className="buyNow">BUY NOW</div>
-                <div className="addCart" onClick={this.handleCartBox}>
+                <div className="addCart" onClick={() => this.addToCart()}>
                   ADD TO CART
                 </div>
               </div>
