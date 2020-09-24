@@ -14,7 +14,16 @@ import {
   mobileData,
   emailData,
 } from "./basicValidationData";
+import { api } from "../../config/api";
 import "./SignUp.scss";
+
+// 전체에 사용하는 변수는 class 밖에서 선언하면 global하게 사용 가능
+const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
+const checkEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+const english = /^[a-zA-Z]*$/;
+const checkNum = /[0-9]/;
+const upper = /[A-Z]/;
 
 class SignUp extends React.Component {
   state = {
@@ -35,13 +44,6 @@ class SignUp extends React.Component {
     idMsg: "",
     pwMsg: "",
     nameMsg: "",
-    idData: idData,
-    pwData: pwData,
-    nameData: nameData,
-    emailData: emailData,
-    phoneList: PHONE,
-    mobileList: MOBILE,
-    regionList: REGION,
     phoneDigit: "",
     mobileDigit: "",
     value: "",
@@ -60,7 +62,6 @@ class SignUp extends React.Component {
     const {
       memberId,
       memberPw,
-      memberRePw,
       memberName,
       memberAddress,
       phoneDigit,
@@ -71,60 +72,10 @@ class SignUp extends React.Component {
       memberMobile2,
       memberEmail,
     } = this.state;
-    const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
-    const checkEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    const english = /^[a-zA-Z]*$/;
 
-    if (!memberId) {
-      alert("아이디를 입력해주세요.");
-    } else if (memberId.match(regExp) || memberId.match(korean)) {
-      alert(
-        "공백/특수문자가 포함되었거나, 숫자로 시작 또는 숫자로만 이루어진 아이디는 사용할 수 없습니다."
-      );
-    } else if (!memberPw) {
-      alert("비밀번호를 입력해주세요.");
-    } else if (isNaN(Number(memberPw && memberRePw))) {
-      alert("올바른 비밀번호를 입력해주세요.");
-    } else if (!memberRePw) {
-      alert("비밀번호를 입력해주세요.");
-    } else if (memberPw !== memberRePw) {
-      alert("비밀번호가 일치하지 않습니다.");
-    } else if (!memberName) {
-      alert("이름을 입력해주세요.");
-    } else if (!memberName.match(korean) && !memberName.match(english)) {
-      alert("이름은 한글과 영문만 입력 가능합니다.");
-    } else if (!memberAddress) {
-      alert("주소를 입력해주세요.");
-    } else if (!memberPhone1 || !memberPhone2) {
-      alert("일반전화 번호를 입력해주세요.");
-    } else if (
-      isNaN(Number(memberPhone1)) ||
-      memberPhone1.length < 4 ||
-      isNaN(Number(memberPhone2)) ||
-      memberPhone2.length < 4
-    ) {
-      alert("올바른 일반전화 번호를 입력해주세요");
-    } else if (!memberMobile1 || !memberMobile2) {
-      alert("휴대폰 번호를 입력해주세요.");
-    } else if (
-      isNaN(Number(memberMobile1)) ||
-      memberMobile1.length < 4 ||
-      isNaN(Number(memberMobile2)) ||
-      memberMobile2.length < 4
-    ) {
-      alert(mobileData[1].msg);
-    } else if (!memberEmail) {
-      alert("이메일을 입력해주세요.");
-    } else if (!memberEmail.match(checkEmail)) {
-      alert(emailData[1].msg);
-    } else if (!this.state.useAgree) {
-      alert("이용약관에 동의 하세요");
-    } else if (!this.state.collectAgree) {
-      return alert("개인정보 수집 및 이용 방침에 동의하세요.");
-    }
+    validLogin({ ...this.state });
 
-    fetch("http://10.58.1.181:8002/signup", {
+    fetch(`${api}/signup`, {
       method: "POST",
       body: JSON.stringify({
         userid: memberId,
@@ -152,8 +103,6 @@ class SignUp extends React.Component {
       });
   };
 
-  handleLogin = e => {};
-
   handleInput = e => {
     const { value, name } = e.target;
     this.setState(
@@ -168,11 +117,7 @@ class SignUp extends React.Component {
 
   validator = () => {
     const { memberId, memberPw, memberRePw, memberName } = this.state;
-    const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
-    const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    const english = /^[a-zA-Z]*$/;
-    const upper = /[A-Z]/;
-    const checkNum = /[0-9]/;
+
     // id validation
     if (
       memberId.match(regExp) ||
@@ -235,102 +180,17 @@ class SignUp extends React.Component {
 
   useAgreeAll = () => {
     const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
-    if (
-      // if문 안으로 들어가면 무조건 true!
-      useAgree &&
-      collectAgree &&
-      smsAgree &&
-      mailAgree
-    ) {
-      this.setState({
-        agreeAll: true,
-      });
-    } else {
-      this.setState({
-        agreeAll: false,
-      });
-    }
+    const isValid = useAgree && collectAgree && smsAgree && mailAgree;
+
+    this.setState({ agreeAll: isValid });
   };
 
-  checkUseAgree = () => {
-    const { useAgree } = this.state;
-
+  checkAgree = key => {
     this.setState(
       {
-        useAgree: !useAgree,
+        [key]: !this.state[key],
       },
       () => this.useAgreeAll()
-    );
-  };
-
-  collectAgreeAll = () => {
-    const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
-    if (useAgree && collectAgree && smsAgree && mailAgree) {
-      this.setState({
-        agreeAll: true,
-      });
-    } else {
-      this.setState({
-        agreeAll: false,
-      });
-    }
-  };
-
-  checkCollectAgree = () => {
-    const { collectAgree } = this.state;
-    this.setState(
-      {
-        collectAgree: !collectAgree,
-      },
-      () => this.collectAgreeAll()
-    );
-  };
-
-  smsAgreeAll = () => {
-    const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
-    if (useAgree && collectAgree && smsAgree && mailAgree) {
-      this.setState({
-        agreeAll: true,
-      });
-    } else {
-      this.setState({
-        agreeAll: false,
-      });
-    }
-  };
-
-  checkSmsAgree = () => {
-    const { smsAgree } = this.state;
-    this.setState(
-      {
-        smsAgree: !smsAgree,
-      },
-      () => {
-        this.smsAgreeAll();
-      }
-    );
-  };
-
-  mailAgreeAll = () => {
-    const { useAgree, collectAgree, smsAgree, mailAgree } = this.state;
-    if (useAgree && collectAgree && smsAgree && mailAgree) {
-      this.setState({
-        agreeAll: true,
-      });
-    } else {
-      this.setState({
-        agreeAll: false,
-      });
-    }
-  };
-
-  checkMailAgree = () => {
-    const { mailAgree } = this.state;
-    this.setState(
-      {
-        mailAgree: !mailAgree,
-      },
-      () => this.mailAgreeAll()
     );
   };
 
@@ -346,17 +206,14 @@ class SignUp extends React.Component {
   };
 
   numberSelect = e => {
-    this.setState({
-      phoneDigit: e.target.value,
-      mobileDigit: e.target.value,
-    });
+    const { value, className } = e.target;
+    const isPhone = className === "phoneDropDown";
+
+    this.setState({ [isPhone ? "phoneDigit" : "mobileDigit"]: value });
   };
 
   render() {
     const {
-      phoneList,
-      mobileList,
-      regionList,
       idCheck,
       pwGuide,
       pwCheck,
@@ -378,19 +235,19 @@ class SignUp extends React.Component {
         <form id="joinForm" name="joinForm">
           <section className="sectionLeft">
             {signUpTitleData.map((el, i) => {
-              let validationCheckProp;
-              if (el.name === "memberId") validationCheckProp = !idCheck;
-              if (el.name === "memberPw") validationCheckProp = pwGuide;
-
-              if (el.name === "memberRePw") validationCheckProp = !pwCheck;
-              if (el.name === "memberName") validationCheckProp = !nameCheck;
-              if (el.name === "memberAddress") validationCheckProp = "";
+              const validateTable = {
+                memberId: !idCheck,
+                memberPw: pwGuide,
+                memberRePw: !pwCheck,
+                memberName: !nameCheck,
+                memberAddress: "",
+              };
 
               return (
                 <SignUpInput
                   key={i}
                   {...el}
-                  validationCheckProp={validationCheckProp}
+                  validationCheckProp={validateTable[el.name]}
                   idMsg={idMsg}
                   pwMsg={pwMsg}
                   nameMsg={nameMsg}
@@ -404,7 +261,7 @@ class SignUp extends React.Component {
               <span className="phone">일반전화 *</span>
               <div className="phoneDesc">
                 <select className="phoneDropDown" onChange={this.numberSelect}>
-                  {phoneList.map((phone, i) => {
+                  {PHONE.map((phone, i) => {
                     return <SelectOptions key={i} children={phone.name} />;
                   })}
                 </select>
@@ -430,9 +287,9 @@ class SignUp extends React.Component {
               <span className="mobile">휴대전화 *</span>
               <div className="mobileDesc">
                 <select className="mobileDropDown" onChange={this.numberSelect}>
-                  {mobileList.map((mobile, i) => {
-                    return <SelectOptions key={i} children={mobile.name} />;
-                  })}
+                  {MOBILE.map((mobile, i) => (
+                    <SelectOptions key={i} children={mobile.name} />
+                  ))}
                 </select>
                 <span>-</span>
                 <input
@@ -535,9 +392,9 @@ class SignUp extends React.Component {
               <span className="region">지역</span>
               <div className="regionDesc">
                 <select className="regionDropdown">
-                  {regionList.map((region, i) => {
-                    return <SelectOptions key={i} children={region.name} />;
-                  })}
+                  {REGION.map((region, i) => (
+                    <SelectOptions key={i} children={region.name} />
+                  ))}
                 </select>
               </div>
             </div>
@@ -545,13 +402,10 @@ class SignUp extends React.Component {
           <UserTerms
             agreeAllToggle={this.agreeAllToggle}
             agreeAll={this.state.agreeAll}
-            checkUseAgree={this.checkUseAgree}
+            checkAgree={this.checkAgree}
             useAgree={this.state.useAgree}
-            checkCollectAgree={this.checkCollectAgree}
             collectAgree={this.state.collectAgree}
-            checkSmsAgree={this.checkSmsAgree}
             smsAgree={this.state.smsAgree}
-            checkMailAgree={this.checkMailAgree}
             mailAgree={this.state.mailAgree}
             handleLogin={this.handleLogin}
             clickSignUp={this.clickSignUp}
@@ -563,3 +417,68 @@ class SignUp extends React.Component {
 }
 
 export default SignUp;
+
+// const validLogin = (
+//   {
+//     // 조건문에 사용할 state를 가져온다.
+//   }
+// ) => {
+//   // 변수 선언할 수 있음. 조건문을 변수에 선언할 수 있음. 와우.
+//   // 조건문
+// };
+
+const validLogin = ({
+  memberId,
+  memberPw,
+  memberRePw,
+  memberName,
+  memberAddress,
+  memberPhone1,
+  memberPhone2,
+  memberMobile1,
+  memberMobile2,
+  memberEmail,
+  useAgree,
+  collectAgree,
+}) => {
+  const idSpecialEmpty = memberId.match(regExp) || memberId.match(korean);
+
+  if (!memberId) return alert("아이디를 입력해주세요.");
+  if (idSpecialEmpty)
+    return alert(
+      "공백/특수문자가 포함되었거나, 숫자로 시작 또는 숫자로만 이루어진 아이디는 사용할 수 없습니다."
+    );
+
+  if (!memberPw) return alert("비밀번호를 입력해주세요.");
+  if (Number(memberPw && memberRePw && checkNum))
+    return alert("올바른 비밀번호를 입력해주세요.");
+
+  if (!memberRePw) return alert("비밀번호를 입력해주세요.");
+  if (memberPw !== memberRePw) return alert("비밀번호가 일치하지 않습니다.");
+  if (!memberName) return alert("이름을 입력해주세요.");
+  if (!memberName.match(korean) && !memberName.match(english))
+    return alert("이름은 한글과 영문만 입력 가능합니다.");
+  if (!memberAddress) return alert("주소를 입력해주세요.");
+  if (!memberPhone1 || !memberPhone2)
+    return alert("일반전화 번호를 입력해주세요.");
+  if (
+    isNaN(Number(memberPhone1)) ||
+    memberPhone1.length < 4 ||
+    isNaN(Number(memberPhone2)) ||
+    memberPhone2.length < 4
+  )
+    return alert("올바른 일반전화 번호를 입력해주세요");
+  if (!memberMobile1 || !memberMobile2)
+    return alert("휴대폰 번호를 입력해주세요.");
+  if (
+    isNaN(Number(memberMobile1)) ||
+    memberMobile1.length < 4 ||
+    isNaN(Number(memberMobile2)) ||
+    memberMobile2.length < 4
+  )
+    return alert(mobileData[1].msg);
+  if (!memberEmail) return alert("이메일을 입력해주세요.");
+  if (!memberEmail.match(checkEmail)) return alert(emailData[1].msg);
+  if (!useAgree) return alert("이용약관에 동의 하세요");
+  if (!collectAgree) return alert("개인정보 수집 및 이용 방침에 동의하세요.");
+};

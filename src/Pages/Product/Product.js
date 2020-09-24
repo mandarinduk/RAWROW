@@ -1,6 +1,7 @@
 import React from "react";
 import ProductNavList from "./Components/ProductNavList/ProductNavList";
 import ItemList from "./Components/ItemList/ItemList";
+import { api } from "../../config/api";
 import "./Product.scss";
 
 class Product extends React.Component {
@@ -11,18 +12,51 @@ class Product extends React.Component {
       navList: DEFAULT_LIST,
       itemList: [],
       category: "ALL",
+      subCategoryId: "ALL",
+      value: "0",
     };
   }
 
   componentDidMount() {
-    fetch("http://localhost:3000/data/productItemListData.json")
-      .then(res => res.json())
-      .then(res => {
-        this.setState({ itemList: res.data });
-      });
+    const { value } = this.state;
+    fetch(`${api}/products/list?sort_method=${value}`)
+      // fetch("http://localhost:3000/data/productItemListData.json")
+      .then((res) => res.json())
+      .then((res) => this.setState({ itemList: res.data }));
   }
 
-  titleChange = contents => {
+  componentDidUpdate(preProps, preState) {
+    const { category, subCategoryId, value } = this.state;
+    const isAll = category === "ALL";
+    const isNotSubCategory =
+      subCategoryId === "R BAG" ||
+      subCategoryId === "R EYE" ||
+      subCategoryId === "R TRUNK" ||
+      subCategoryId === "ACCESSORY" ||
+      subCategoryId === "CLEARANCE";
+    const isApi = isAll
+      ? `${api}/products/list?sort_method=${value}`
+      : isNotSubCategory
+      ? `${api}/products/category/list?category=${CATEGORY_OBJ[category]}`
+      : `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`;
+
+    if (preState.category !== category) {
+      fetch(isApi)
+        .then((res) => res.json())
+        .then((res) => this.setState({ itemList: res.data }));
+    } else if (preState.value !== value) {
+      fetch(`${api}/products/list?sort_method=${value}`)
+        .then((res) => res.json())
+        .then((res) => this.setState({ itemList: res.data }));
+    }
+  }
+
+  titleChange = (contents) => {
+    const OVERLAP_CATEGORY =
+      contents === "BACKPACK" ||
+      contents === "TOTE" ||
+      contents === "CROSS" ||
+      contents === "POUCH";
     const isDefaultList =
       contents === "ALL" || contents === "NEW ARRIVAL" || contents === "SALE";
     const isNavList = isDefaultList ? DEFAULT_LIST : LIST_OBJ[contents];
@@ -32,22 +66,35 @@ class Product extends React.Component {
       title: isNavList ? contents : title,
       navList: isNavList ? isNavList : navList,
       category: contents,
+      subCategoryId:
+        OVERLAP_CATEGORY && title === "CLEARANCE" ? contents + 1 : contents,
     });
   };
 
+  valueCheck = (e) => {
+    this.setState({ value: e.target.value });
+  };
+
   render() {
-    const { title, navList, itemList, category } = this.state;
+    const { title, navList, itemList, category, value } = this.state;
     const isDefaultList =
       title === "ALL" || title === "NEW ARRIVAL" || title === "SALE";
     const isDefault = isDefaultList ? DEFAULT_LIST : navList;
 
     return (
       <div className="Product">
-        <h2
-          className={(title === "CLEARANCE" || title === "SALE") && "h2Orange"}
-        >
-          {title}
-        </h2>
+        <div className="titleCenter">
+          <div
+            className={
+              title === "CLEARANCE" || title === "SALE"
+                ? "h2Orange title"
+                : "title"
+            }
+          >
+            {title}
+            <div className="titleBackground"></div>
+          </div>
+        </div>
         <div className="category">
           <ul>
             {isDefault?.map((content, index) => (
@@ -55,31 +102,30 @@ class Product extends React.Component {
                 key={index}
                 content={content}
                 index={index}
-                nameChange={contents => this.titleChange(contents)}
+                nameChange={(contents) => this.titleChange(contents)}
                 checkTitle={category}
               />
             ))}
           </ul>
           <div>
-            <select>
-              <option>FILTER</option>
-              <option>신상품</option>
-              <option>인기순</option>
-              <option>낮은가격순</option>
-              <option>높은가격순</option>
+            <select value={value} onChange={this.valueCheck}>
+              <option value="0">FILTER</option>
+              <option value="1">낮은가격순</option>
+              <option value="2">높은가격순</option>
             </select>
           </div>
         </div>
         <ul>
           {itemList?.map((item, idx) => (
             <ItemList
-              key={item.product_name + idx}
-              itemSrc={item.thumbnail_image}
+              key={item.name + idx}
+              itemSrc={item.thumbnail}
               itemHoverSrc={item.hover_image}
-              itemName={item.product_name}
+              itemName={item.name}
               itemPrice={item.price}
               itemSalePrice={item.sale_price}
               itemSubText={item.sub_text}
+              itemLastText={title}
             />
           ))}
         </ul>
@@ -126,4 +172,42 @@ const LIST_OBJ = {
   "R TRUNK": R_TRUNK,
   ACCESSORY: ACCESSORY,
   CLEARANCE: CLEARANCE,
+};
+
+const CATEGORY_OBJ = {
+  "NEW ARRIVAL": 1,
+  "R BAG": 2,
+  "R EYE": 3,
+  "R TRUNK": 4,
+  ACCESSORY: 5,
+  CLEARANCE: 6,
+  SALE: 7,
+};
+
+const SUB_CATEGORY_OBJ = {
+  BACKPACK: 1,
+  TOTE: 2,
+  CROSS: 3,
+  POUCH: 4,
+  "ULTRA THIN": 5,
+  THIN: 6,
+  CONDENSE: 7,
+  BOLD: 8,
+  "R SUN": 9,
+  "37L": 10,
+  "63L": 11,
+  "72L": 12,
+  "88L": 13,
+  SET: 14,
+  "TRAVEL ACC": 15,
+  COLLABORATION: 16,
+  WALLET: 17,
+  ETC: 18,
+  BACKPACK1: 19,
+  CROSS1: 20,
+  TOTE1: 21,
+  POUCH1: 22,
+  TRUNK: 23,
+  SALE: 25,
+  "NEW ARRIVAL": 26,
 };
