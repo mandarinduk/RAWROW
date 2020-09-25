@@ -8,12 +8,42 @@ class Cart extends React.Component {
   };
 
   componentDidMount() {
-    fetch("/data/cartListData.json")
+    fetch("http://10.58.1.181:8002/cart", {
+      method: "GET",
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    })
+      // fetch("/data/cartListData.json")
       .then((res) => res.json())
       .then((res) => {
         this.setState({ cartList: res.data });
       });
   }
+
+  handleDelete = (cartId) => {
+    const { cartList } = this.state;
+
+    const filteredList = cartList.filter(
+      (content) => content.cart_id !== cartId
+    );
+    // this.setState({
+    //   cartList: filteredList,
+    // });
+
+    fetch(`http://10.58.1.181:8002/cart/${cartId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          cartList: filteredList,
+        });
+      });
+  };
 
   handlePlus = (idx) => {
     const { cartList } = this.state;
@@ -40,10 +70,11 @@ class Cart extends React.Component {
     const { cartList } = this.state;
     let totalPrice = 0;
 
-    for (let i = 0; i < cartList.length; i++) {
-      totalPrice += cartList[i].price * cartList[i].quantity;
+    if (cartList !== undefined) {
+      for (let i = 0; i < cartList.length; i++) {
+        totalPrice += cartList[i].product_price * cartList[i].quantity;
+      }
     }
-
     return totalPrice.toLocaleString();
   };
 
@@ -51,9 +82,14 @@ class Cart extends React.Component {
     const { cartList } = this.state;
     let totalSalePrice = 0;
 
-    for (let i = 0; i < cartList.length; i++) {
-      totalSalePrice =
-        (cartList[i].price - cartList[i].sale_price) * cartList[i].quantity;
+    if (cartList !== undefined) {
+      for (let i = 0; i < cartList.length; i++) {
+        if (cartList[i].product_sale_price !== 0) {
+          totalSalePrice =
+            (cartList[i].price - cartList[i].product_sale_price) *
+            cartList[i].quantity;
+        }
+      }
     }
 
     return totalSalePrice.toLocaleString();
@@ -84,15 +120,17 @@ class Cart extends React.Component {
           <ul>
             {cartList?.map((content, i) => (
               <CartList
-                key={content.name}
+                key={content.product_name}
                 idx={i}
-                name={content.name}
-                price={content.price}
-                salePrice={content.sale_price}
+                name={content.product_name}
+                price={content.product_price}
+                salePrice={content.product_sale_price}
                 amount={content.quantity}
-                thumbnail={content.thumbnail_image}
+                thumbnail={content.thumbnail}
+                handleDelete={this.handleDelete}
                 handlePlus={this.handlePlus}
                 handleMinus={this.handleMinus}
+                cartId={content.cart_id}
               />
             ))}
           </ul>

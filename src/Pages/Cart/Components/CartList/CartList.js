@@ -12,6 +12,8 @@ class CartList extends React.Component {
       price,
       salePrice,
       thumbnail,
+      handleDelete,
+      cartId,
     } = this.props;
 
     return (
@@ -24,7 +26,7 @@ class CartList extends React.Component {
         </div>
         <div className="listInfo">
           <a href="">{name}</a>
-          <div className="deleteBox">
+          <div className="deleteBox" onClick={() => handleDelete(cartId)}>
             <span className="delete1"></span>
             <span className="delete2"></span>
           </div>
