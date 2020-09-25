@@ -19,6 +19,18 @@ class Product extends React.Component {
 
   componentDidMount() {
     const { value } = this.state;
+    const { id } = this.props.match.params;
+
+    // this.setState({
+    //   title: id,
+    //   category: id,
+    // });
+
+    // const isApi =
+    //   id === "ALL"
+    //     ? `${api}/products/list?sort_method=${value}`
+    //     : `${api}/products/category/list?category=${CATEGORY_OBJ[id]}`;
+
     fetch(`${api}/products/list?sort_method=${value}`)
       // fetch("http://localhost:3000/data/productItemListData.json")
       .then((res) => res.json())
@@ -37,15 +49,21 @@ class Product extends React.Component {
     const isApi = isAll
       ? `${api}/products/list?sort_method=${value}`
       : isNotSubCategory
-      ? `${api}/products/category/list?category=${CATEGORY_OBJ[category]}`
-      : `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}`;
+      ? `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&sort_method=${value}`
+      : `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}&sort_method=${value}`;
 
     if (preState.category !== category) {
       fetch(isApi)
         .then((res) => res.json())
         .then((res) => this.setState({ itemList: res.data }));
     } else if (preState.value !== value) {
-      fetch(`${api}/products/list?sort_method=${value}`)
+      const test = isAll
+        ? `${api}/products/list?sort_method=${value}`
+        : isNotSubCategory
+        ? `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&sort_method=${value}`
+        : `${api}/products/category/list?category=${CATEGORY_OBJ[category]}&subcategory=${SUB_CATEGORY_OBJ[subCategoryId]}&sort_method=${value}`;
+
+      fetch(test)
         .then((res) => res.json())
         .then((res) => this.setState({ itemList: res.data }));
     }
@@ -68,6 +86,7 @@ class Product extends React.Component {
       category: contents,
       subCategoryId:
         OVERLAP_CATEGORY && title === "CLEARANCE" ? contents + 1 : contents,
+      value: 0,
     });
   };
 
@@ -119,6 +138,7 @@ class Product extends React.Component {
           {itemList?.map((item, idx) => (
             <ItemList
               key={item.name + idx}
+              itemId={item.id}
               itemSrc={item.thumbnail}
               itemHoverSrc={item.hover_image}
               itemName={item.name}

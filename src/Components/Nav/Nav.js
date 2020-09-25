@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { api } from "../../config/api";
 import "./Nav.scss";
 
@@ -10,33 +11,19 @@ class Nav extends React.Component {
       searchOn: false,
       popupOn: true,
       searchResult: [],
-      searchVal: "",
     };
   }
 
   handleKeyword = (e) => {
-    // const { value } = e.target;
-
-    this.setState(
-      {
-        searchVal: e.target.value,
-      },
-      () => {
-        const { searchVal } = this.state;
-        fetch(`${api}/products/search?keyword=${searchVal}`)
-          .then((res) => {
-            console.log(res.status);
-            return res.json();
-          })
-          .then((result) => {
-            console.log("1st", searchVal);
-            this.setState({
-              searchResult: result.data,
-            });
-          });
-        console.log("2nd", searchVal);
-      }
-    );
+    fetch(`${api}/products/search?keyword=${e.target.value}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        this.setState({
+          searchResult: result.data,
+        });
+      });
   };
 
   handlePopup = () => {
@@ -51,8 +38,14 @@ class Nav extends React.Component {
     });
   };
 
+  userLogout = () => {
+    window.localStorage.removeItem("token");
+    window.location.reload();
+  };
+
   render() {
-    const { searchOn, popupOn, searchResult, searchVal } = this.state;
+    const { searchOn, popupOn, searchResult } = this.state;
+    const token = localStorage.getItem("token");
     return (
       <div className="Nav">
         <div className="navWrapper">
@@ -70,7 +63,7 @@ class Nav extends React.Component {
           </div>
           <div className="navContent">
             <div className="navHome">
-              <a href="/main">
+              <a href="http://localhost:3000">
                 <img
                   src="https://www.rawrow.com/web/upload/mundane/logo.png"
                   alt="logo"
@@ -80,9 +73,7 @@ class Nav extends React.Component {
             </div>
             <ul className="navCenter">
               <li className="navCenterList">
-                <a href="main" className="">
-                  PRODUCT
-                </a>
+                <Link to="/product/ALL">PRODUCT</Link>
                 <ul className="productItems">
                   {NAV_TITLE.PRODUCT.map((title, i) => {
                     return (
@@ -94,7 +85,7 @@ class Nav extends React.Component {
                 </ul>
               </li>
               <li className="navCenterList">
-                <a href="main">EXPLORE</a>
+                <Link to="/product/ALL">EXPLORE</Link>
                 <ul className="exploreItems">
                   {NAV_TITLE.EXPLORE.map((title, i) => {
                     return <li key={i}>{title}</li>;
@@ -102,7 +93,7 @@ class Nav extends React.Component {
                 </ul>
               </li>
               <li className="navCenterList">
-                <a href="main">CENTER</a>
+                <Link to="/product/ALL">CENTER</Link>
                 <ul className="centerItems">
                   {NAV_TITLE.CENTER.map((title, i) => {
                     return <li key={i}>{title}</li>;
@@ -113,8 +104,16 @@ class Nav extends React.Component {
             <ul className="navRight">
               <li onClick={this.handleSearch}>SEARCH</li>
               <li>MY PAGE</li>
-              <li>LOGIN</li>
-              <li>CART</li>
+              {window.localStorage.getItem("token") === null ? (
+                <Link to="/login">
+                  <li>LOGIN</li>
+                </Link>
+              ) : (
+                <li onClick={this.userLogout}>LOGOUT</li>
+              )}
+              <Link to={token !== null ? "/cart" : "/login"}>
+                <li>CART</li>
+              </Link>
               <li>KR /</li>
             </ul>
           </div>
@@ -123,7 +122,6 @@ class Nav extends React.Component {
               <input
                 type="text"
                 placeholder="검색어를 입력하세요"
-                value={searchVal}
                 onChange={this.handleKeyword}
               />
               <div>
@@ -139,20 +137,26 @@ class Nav extends React.Component {
           >
             {searchResult?.map((el) => {
               return (
-                <div key={el.id} className="resultBox">
-                  <img alt="resultImage" src={el.thumbnail} />
-                  <span className="category">{el.category}</span>
-                  <span className="searchName">{el.name}</span>
-                  <div>
-                    <span className={el.sale_price > 0 ? "price" : ""}>
-                      {el.price}원
-                    </span>
-                    {el.sale_price > 0 && (
-                      <span className="salePrice">{el.sale_price}원</span>
-                    )}
+                <a
+                  key={el.id}
+                  href={`/detail/${el.id}`}
+                  onClick={this.goToDetail}
+                >
+                  <div className="resultBox" name={el.id}>
+                    <img alt="resultImage" src={el.thumbnail} />
+                    <span className="category">{el.category}</span>
+                    <span className="searchName">{el.name}</span>
+                    <div>
+                      <span className={el.sale_price > 0 ? "price" : ""}>
+                        {el.price}원
+                      </span>
+                      {el.sale_price > 0 && (
+                        <span className="salePrice">{el.sale_price}원</span>
+                      )}
+                    </div>
+                    <span className="buyNow">BUYNOW</span>
                   </div>
-                  <span className="buyNow">BUYNOW</span>
-                </div>
+                </a>
               );
             })}
           </div>

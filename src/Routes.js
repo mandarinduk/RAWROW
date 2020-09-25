@@ -7,22 +7,24 @@ import Product from "./Pages/Product/Product";
 import SignUp from "./Pages/SignUp/SignUp";
 import Nav from "./Components/Nav/Nav";
 import Footer from "./Components/Footer/Footer";
+import Cart from "./Pages/Cart/Cart";
 
 class Routes extends React.Component {
   render() {
     return (
       <>
-        <Nav />
         <Router>
+          <Nav />
           <Switch>
             <Route exact path="/detail/:id" component={Detail} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/" component={Main} />
-            <Route exact path="/product" component={Product} />
+            <Route exact path="/product/:id" component={Product} />
             <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/cart" component={Cart} />
           </Switch>
+          <Footer />
         </Router>
-        <Footer />
       </>
     );
   }

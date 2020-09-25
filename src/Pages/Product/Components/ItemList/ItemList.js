@@ -1,9 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./ItemList.scss";
 
 class ItemList extends React.Component {
   render() {
     const {
+      itemId,
       itemSrc,
       itemHoverSrc,
       itemName,
@@ -18,7 +20,7 @@ class ItemList extends React.Component {
         {this.props.length !== 0 && (
           <li className="listEffect">
             <div className="itemImage">
-              <a href="">
+              <Link to={`/detail/${itemId}`}>
                 <img className="imgPic" alt="Item Pic" src={itemSrc} />
                 {itemHoverSrc && (
                   <img
@@ -27,10 +29,10 @@ class ItemList extends React.Component {
                     src={itemHoverSrc}
                   />
                 )}
-              </a>
+              </Link>
             </div>
             <div className="itemInfo">
-              <a href="">
+              <Link to={`/detail/${itemId}`}>
                 <span>{itemName}</span>
                 <span className={itemSalePrice ? "price priceLineOn" : "price"}>
                   {itemPrice && itemPrice.toLocaleString()}원
@@ -44,7 +46,7 @@ class ItemList extends React.Component {
                 {itemLastText === "CLEARANCE" && (
                   <span className="lastText">LAST CHANCE</span>
                 )}
-              </a>
+              </Link>
             </div>
           </li>
         )}

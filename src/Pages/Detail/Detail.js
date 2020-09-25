@@ -1,13 +1,9 @@
 import React from "react";
 import InfoTitle from "./Components/InfoTitle";
 import Review from "./Components/Review";
+import { Link } from "react-router-dom";
 import { api } from "../../config/api";
-import {
-  DETAIL_DATA,
-  DESC_DATA,
-  CHANGE_DATA,
-  related_product_list_test,
-} from "./data";
+import { DETAIL_DATA, DESC_DATA, CHANGE_DATA } from "./data";
 import "./Detail.scss";
 
 class Detail extends React.Component {
@@ -19,10 +15,47 @@ class Detail extends React.Component {
       activeNotice: false,
       activePolicy: false,
       activeRelated: false,
+      activeCartBox: false,
       detail: {},
       count: 1,
     };
   }
+
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    fetch(`${api}/products/${id}`)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result.data);
+        setTimeout(() => {
+          this.setState({
+            detail: result.data[0],
+          });
+        }, 1000);
+      });
+  }
+
+  addToCart = () => {
+    fetch(`${api}/cart`, {
+      method: "POST",
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        product_id: window.location.href.substr(29),
+        quantity: this.state.count,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.message === "INVALID_TOKEN") {
+          alert("로그인이 필요합니다.");
+          this.props.history.push("/login");
+        } else {
+          this.handleCartBox();
+        }
+      });
+  };
 
   handleInfo = (idx) => {
     this.setState((prev) => {
@@ -52,18 +85,11 @@ class Detail extends React.Component {
     }
   };
 
-  componentDidMount() {
-    fetch(`${api}/products/146`)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        setTimeout(() => {
-          this.setState({
-            detail: result.data[0],
-          });
-        }, 1000);
-      });
-  }
+  handleCartBox = () => {
+    this.setState((prev) => {
+      return { activeCartBox: !prev.activeCartBox };
+    });
+  };
 
   render() {
     const {
@@ -73,6 +99,7 @@ class Detail extends React.Component {
       activeRelated,
       detail,
       count,
+      activeCartBox,
     } = this.state;
 
     const {
@@ -85,9 +112,19 @@ class Detail extends React.Component {
       thumbnail_group,
       related_group,
     } = detail;
-
     return (
       <div className="Detail">
+        <div
+          className={activeCartBox ? "popupCart" : "popupCart popupCartOff"}
+          onClick={this.handleCartBox}
+        >
+          <div className="messageBox">
+            <p>장바구니에 상품이 담겼습니다.</p>
+            <Link to={`/cart`}>
+              <div>장바구니 바로가기</div>
+            </Link>
+          </div>
+        </div>
         {Object.keys(detail).length ? (
           <div className="detailContents">
             <div className="imageSection">
@@ -140,8 +177,19 @@ class Detail extends React.Component {
                 <li className="subText">{sub_text}</li>
               </ul>
               <div className="productColor">
-                {thumbnail_group?.map((el, i) => {
-                  return <img key={i} alt="img" src={el} />;
+                {thumbnail_group?.map((el) => {
+                  return (
+                    <a
+                      href={`/detail/${el.thumbnail_id}`}
+                      key={el.thumbnail_id}
+                    >
+                      <img
+                        key={el.thumbnail_id}
+                        alt="img"
+                        src={el.thumbnail_image}
+                      />
+                    </a>
+                  );
                 })}
               </div>
               <div className="orderCounter">
@@ -161,7 +209,9 @@ class Detail extends React.Component {
               )}원`}</div>
               <div className="orderBox">
                 <div className="buyNow">BUY NOW</div>
-                <div className="addCart">ADD TO CART</div>
+                <div className="addCart" onClick={() => this.addToCart()}>
+                  ADD TO CART
+                </div>
               </div>
               <div className="description">
                 <p>
@@ -236,48 +286,31 @@ class Detail extends React.Component {
                   <ul>
                     {related_group.map((el) => {
                       return (
-                        <li key={el.related_id}>
-                          <img alt="relatedItem" src={el.related_thumbnail} />
-                          <div className="itemTitle">{el.related_name}</div>
-                          <div
-                            className={
-                              el.related_sale_price
-                                ? "itemPrice priceLine"
-                                : "itemPrice"
-                            }
-                          >
-                            {this.changePrice(el.related_price)}원
-                          </div>
-                          {el.related_sale_price !== 0 && (
-                            <div className="itemPrice orange">
-                              {this.changePrice(el.related_sale_price)}원
+                        <a
+                          key={el.related_id}
+                          href={`/detail/${el.related_id}`}
+                        >
+                          <li>
+                            <img alt="relatedItem" src={el.related_thumbnail} />
+                            <div className="itemTitle">{el.related_name}</div>
+                            <div
+                              className={
+                                el.related_sale_price
+                                  ? "itemPrice priceLine"
+                                  : "itemPrice"
+                              }
+                            >
+                              {this.changePrice(el.related_price)}원
                             </div>
-                          )}
-                        </li>
+                            {el.related_sale_price !== 0 && (
+                              <div className="itemPrice orange">
+                                {this.changePrice(el.related_sale_price)}원
+                              </div>
+                            )}
+                          </li>
+                        </a>
                       );
                     })}
-                    {/* {related_product_list_test.map((el) => {
-                      return (
-                        <li key={el.id}>
-                          <img alt="relatedItem" src={el.thumbnail} />
-                          <div className="itemTitle">{el.name}</div>
-                          <div
-                            className={
-                              el.sale_price
-                                ? "itemPrice priceLine"
-                                : "itemPrice"
-                            }
-                          >
-                            {this.changePrice(el.price)}원
-                          </div>
-                          {el.sale_price !== 0 && (
-                            <div className="itemPrice orange">
-                              {this.changePrice(el.sale_price)}원
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })} */}
                   </ul>
                 </div>
               </div>
