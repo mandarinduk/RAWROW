@@ -45,6 +45,7 @@ class Nav extends React.Component {
 
   render() {
     const { searchOn, popupOn, searchResult } = this.state;
+    const token = localStorage.getItem("token");
     return (
       <div className="Nav">
         <div className="navWrapper">
@@ -84,7 +85,7 @@ class Nav extends React.Component {
                 </ul>
               </li>
               <li className="navCenterList">
-                <Link to="/product">EXPLORE</Link>
+                <Link to="/product/ALL">EXPLORE</Link>
                 <ul className="exploreItems">
                   {NAV_TITLE.EXPLORE.map((title, i) => {
                     return <li key={i}>{title}</li>;
@@ -92,7 +93,7 @@ class Nav extends React.Component {
                 </ul>
               </li>
               <li className="navCenterList">
-                <a href="main">CENTER</a>
+                <Link to="/product/ALL">CENTER</Link>
                 <ul className="centerItems">
                   {NAV_TITLE.CENTER.map((title, i) => {
                     return <li key={i}>{title}</li>;
@@ -104,11 +105,13 @@ class Nav extends React.Component {
               <li onClick={this.handleSearch}>SEARCH</li>
               <li>MY PAGE</li>
               {window.localStorage.getItem("token") === null ? (
-                <li>LOGIN</li>
+                <Link to="/login">
+                  <li>LOGIN</li>
+                </Link>
               ) : (
                 <li onClick={this.userLogout}>LOGOUT</li>
               )}
-              <Link to="/cart">
+              <Link to={token !== null ? "/cart" : "/login"}>
                 <li>CART</li>
               </Link>
               <li>KR /</li>

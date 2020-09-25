@@ -26,6 +26,7 @@ class Detail extends React.Component {
     fetch(`${api}/products/${id}`)
       .then((res) => res.json())
       .then((result) => {
+        console.log(result.data);
         setTimeout(() => {
           this.setState({
             detail: result.data[0],
@@ -35,17 +36,6 @@ class Detail extends React.Component {
   }
 
   addToCart = () => {
-    // fetch(`${api}/products/202`. {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: window.localStorage.getItem("token"),
-    //   },
-    //   body: JSON.stringify({
-    //     product_id: window.location.href.substr(29),
-    //     count: this.state.count,
-    //   }),
-    // })
-
     fetch(`${api}/cart`, {
       method: "POST",
       headers: {
@@ -64,8 +54,6 @@ class Detail extends React.Component {
         } else {
           this.handleCartBox();
         }
-        // result.cart_list === success
-        // result.message === INVALID_TOKEN
       });
   };
 
@@ -298,24 +286,29 @@ class Detail extends React.Component {
                   <ul>
                     {related_group.map((el) => {
                       return (
-                        <li key={el.related_id}>
-                          <img alt="relatedItem" src={el.related_thumbnail} />
-                          <div className="itemTitle">{el.related_name}</div>
-                          <div
-                            className={
-                              el.related_sale_price
-                                ? "itemPrice priceLine"
-                                : "itemPrice"
-                            }
-                          >
-                            {this.changePrice(el.related_price)}원
-                          </div>
-                          {el.related_sale_price !== 0 && (
-                            <div className="itemPrice orange">
-                              {this.changePrice(el.related_sale_price)}원
+                        <a
+                          key={el.related_id}
+                          href={`/detail/${el.related_id}`}
+                        >
+                          <li>
+                            <img alt="relatedItem" src={el.related_thumbnail} />
+                            <div className="itemTitle">{el.related_name}</div>
+                            <div
+                              className={
+                                el.related_sale_price
+                                  ? "itemPrice priceLine"
+                                  : "itemPrice"
+                              }
+                            >
+                              {this.changePrice(el.related_price)}원
                             </div>
-                          )}
-                        </li>
+                            {el.related_sale_price !== 0 && (
+                              <div className="itemPrice orange">
+                                {this.changePrice(el.related_sale_price)}원
+                              </div>
+                            )}
+                          </li>
+                        </a>
                       );
                     })}
                   </ul>
