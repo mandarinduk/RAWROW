@@ -9,14 +9,14 @@ class Login extends React.Component {
     memberPw: "",
   };
 
-  handleInput = e => {
+  handleInput = (e) => {
     const { value, name } = e.target;
     this.setState({
       [name]: value,
     });
   };
 
-  enterValue = e => {
+  enterValue = (e) => {
     const { memberId, memberPw } = this.state;
     if (e.key && e.key !== "Enter") return;
     if (!memberId.length) return alert("아이디 항목은 필수 입력값입니다.");
@@ -30,12 +30,13 @@ class Login extends React.Component {
         password: this.state.memberPw,
       }),
     })
-      .then(response => response.json())
-      .then(result => {
+      .then((response) => response.json())
+      .then((result) => {
         if (result.Authorization) {
           localStorage.setItem("token", result.Authorization);
           alert("로그인 성공");
-          this.props.history.push("/main");
+          // this.props.history.push("/");
+          window.location.href = "/";
         } else if (result.messgae === "INVALID_USER") {
           alert("아이디나 비밀번호를 확인해주세요");
         }

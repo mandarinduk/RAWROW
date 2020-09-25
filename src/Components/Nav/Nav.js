@@ -40,7 +40,7 @@ class Nav extends React.Component {
 
   userLogout = () => {
     window.localStorage.removeItem("token");
-    window.location.reload();
+    window.location.href = "/";
   };
 
   render() {
@@ -73,7 +73,7 @@ class Nav extends React.Component {
             </div>
             <ul className="navCenter">
               <li className="navCenterList">
-                <Link to="/product/ALL">PRODUCT</Link>
+                <a href="/product/ALL">PRODUCT</a>
                 <ul className="productItems">
                   {NAV_TITLE.PRODUCT.map((title, i) => {
                     return (
@@ -85,7 +85,7 @@ class Nav extends React.Component {
                 </ul>
               </li>
               <li className="navCenterList">
-                <Link to="/product/ALL">EXPLORE</Link>
+                <a href="/product/ALL">EXPLORE</a>
                 <ul className="exploreItems">
                   {NAV_TITLE.EXPLORE.map((title, i) => {
                     return <li key={i}>{title}</li>;
@@ -93,7 +93,7 @@ class Nav extends React.Component {
                 </ul>
               </li>
               <li className="navCenterList">
-                <Link to="/product/ALL">CENTER</Link>
+                <a href="/product/ALL">CENTER</a>
                 <ul className="centerItems">
                   {NAV_TITLE.CENTER.map((title, i) => {
                     return <li key={i}>{title}</li>;
@@ -154,7 +154,7 @@ class Nav extends React.Component {
                         <span className="salePrice">{el.sale_price}원</span>
                       )}
                     </div>
-                    <span className="buyNow">BUYNOW</span>
+                    <span className="buyNow">DETAIL ></span>
                   </div>
                 </a>
               );

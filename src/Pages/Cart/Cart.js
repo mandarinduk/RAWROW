@@ -86,7 +86,7 @@ class Cart extends React.Component {
       for (let i = 0; i < cartList.length; i++) {
         if (cartList[i].product_sale_price !== 0) {
           totalSalePrice =
-            (cartList[i].price - cartList[i].product_sale_price) *
+            (cartList[i].product_price - cartList[i].product_sale_price) *
             cartList[i].quantity;
         }
       }

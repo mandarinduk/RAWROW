@@ -8,7 +8,6 @@ import SignUp from "./Pages/SignUp/SignUp";
 import Cart from "./Pages/Cart/Cart";
 import Nav from "./Components/Nav/Nav";
 import Footer from "./Components/Footer/Footer";
-import Cart from "./Pages/Cart/Cart";
 
 class Routes extends React.Component {
   render() {
