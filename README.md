@@ -9,8 +9,6 @@ rawrow(https://www.rawrow.com) 클론 코딩 프로젝트입니다.
 * [백엔드 주소](https://github.com/wecode-bootcamp-korea/12-HellRowWorld-backend)
 
 # Stack
-* html
-* css
 * javascript
 * react
 * scss
