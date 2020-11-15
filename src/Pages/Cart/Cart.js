@@ -1,6 +1,7 @@
 import React from "react";
 import CartList from "./Components/CartList/CartList";
 import "./Cart.scss";
+import { api } from "../../config/api";
 
 class Cart extends React.Component {
   state = {
@@ -8,13 +9,12 @@ class Cart extends React.Component {
   };
 
   componentDidMount() {
-    fetch("http://10.58.1.181:8002/cart", {
+    fetch(`${api}/cart`, {
       method: "GET",
       headers: {
         Authorization: localStorage.getItem("token"),
       },
     })
-      // fetch("/data/cartListData.json")
       .then((res) => res.json())
       .then((res) => {
         this.setState({ cartList: res.data });
@@ -31,7 +31,7 @@ class Cart extends React.Component {
     //   cartList: filteredList,
     // });
 
-    fetch(`http://10.58.1.181:8002/cart/${cartId}`, {
+    fetch(`${api}/cart/${cartId}`, {
       method: "DELETE",
       headers: {
         Authorization: localStorage.getItem("token"),
