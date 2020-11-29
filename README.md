@@ -5,8 +5,8 @@ rawrow(https://www.rawrow.com) 프로젝트입니다.
 * 구성 : 
   * Front-end : 배규덕, 이흥수, 김상준
   * Back-end  : 이수현, 문성호
-* [프론트 주소](https://github.com/wecode-bootcamp-korea/12-HellRowWorld-frontend)
-* [백엔드 주소](https://github.com/wecode-bootcamp-korea/12-HellRowWorld-backend)
+* [결과물-유튜브](https://youtu.be/ouj-QOn5r8w)
+* [후기-블로그](https://velog.io/@mandarinduk/rawrow-%ED%81%B4%EB%A1%A0-%ED%9A%8C%EA%B3%A0%EB%A1%9D)
 
 # Stack
 * javascript
